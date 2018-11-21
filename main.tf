@@ -22,6 +22,9 @@ locals {
   kops_cluster_name      = "kaladaopuiyo.com"
   domain_name            = "www.kaladaopuiyo.com"
   kops_state_bucket_name = "k8s.kaladaopuiyo.com"
+  cluster_region         = "us-east-1"
+  cluster_key            = "env:/${terraform.workspace}/kops-cluster"
+  cluster_bucket         = "tf-state-test-kalada-opuiyo"
 }
 
 module "kops_cluster" {
@@ -53,6 +56,7 @@ module "kops_cluster" {
   dns                    = "${var.dns}"
   cloud                  = "${var.cloud}"
   output                 = "${var.output}"
+  out                    = "${var.out}"
   admin_access           = "${var.admin_access}"
   target                 = "${var.target}"
   kubernetes_version     = "${var.kubernetes_version}"
@@ -61,4 +65,43 @@ module "kops_cluster" {
   authorization          = "${var.authorization}"
   bastion                = "${var.bastion}"
   update_cluster         = "${local.update_cluster}"
+  cluster_bucket         = "${local.cluster_bucket}"
+
+  cluster_key    = "${local.cluster_key}"
+  cluster_region = "${local.cluster_region}"
+
+  enable_dns_support   = true
+  enable_dns_hostnames = true
+  instance_tenancy     = "default"
+
+  availability_zone = ""
+
+  # private and/or public
+  route_tables = ["public", "private"]
+
+  ##########################################################################
+  # Subnets
+  ##########################################################################
+  vpc_cidr = "10.0.0.0/16"
+
+  # If a private route table is needed set to true and create a subnet called nat for the nat gateway
+  # (index_number)-name_of_subnet
+  create_nat_gateway = false
+
+  subnets = {
+    "1-public" = {
+      cidr_block = "10.0.32.0/24"
+      type       = "private"
+    }
+
+    "2-private" = {
+      cidr_block = "10.0.16.0/24"
+      type       = "public"
+    }
+
+    # "3-nat" = {
+    #   cidr_block = "10.0.64.0/24"
+    #   type       = "public"
+    # }
+  }
 }

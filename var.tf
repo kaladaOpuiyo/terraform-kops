@@ -25,5 +25,6 @@ variable "force_destroy" {}
 variable "admin_access" {}
 variable "cloud" {}
 variable "bastion" {}
+variable "out" {}
 
 variable "ami" {}

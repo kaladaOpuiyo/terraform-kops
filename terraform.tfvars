@@ -1,5 +1,7 @@
 target = "terraform"
 
+out = ".kops-tf"
+
 ami = "ami-03ed1c12a1dd84320"
 
 master_size = "t2.micro"
@@ -18,7 +20,7 @@ node_count = "3"
 
 zones = "us-east-1a,us-east-1b,us-east-1c"
 
-networking = "flannel"
+networking = "calico"
 
 network_cidr = "172.20.0.0/16"
 

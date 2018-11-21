@@ -148,3 +148,56 @@ variable "ami" {
 variable "domain_name" {
   description = "domain_name"
 }
+
+variable "out" {
+  description = "out"
+}
+
+variable "vpc_cidr" {
+  description = "vpc_cidr"
+}
+
+variable "enable_dns_support" {
+  description = "enable_dns_support"
+}
+
+variable "enable_dns_hostnames" {
+  description = "enable_dns_hostnames"
+}
+
+variable "instance_tenancy" {
+  description = "instance_tenancy "
+}
+
+variable "subnets" {
+  description = "subnets"
+  default     = {}
+}
+
+variable "route_tables" {
+  default = []
+}
+
+variable "availability_zone" {
+  description = "availability_zone"
+}
+
+variable "create_nat_gateway" {
+  description = "create_nat_gateway"
+}
+
+variable "destination_cidr_block" {
+  default = "0.0.0.0/0"
+}
+
+variable "cluster_bucket" {
+  description = "cluster_bucket"
+}
+
+variable "cluster_key" {
+  description = "cluster_key"
+}
+
+variable "cluster_region" {
+  description = "cluster_region"
+}
