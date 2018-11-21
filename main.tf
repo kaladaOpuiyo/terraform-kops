@@ -14,7 +14,7 @@ terraform {
 locals {
   # update_cluster should always be false for now. 
   # Kops does not provided a simple way to programmatically update a cluster 
-  # still working on this ;)
+  # still working on this ;) DOES NOTHING 
   update_cluster = "false"
 
   dry_run                = "false"
@@ -25,6 +25,8 @@ locals {
   cluster_region         = "us-east-1"
   cluster_key            = "env:/${terraform.workspace}/kops-cluster"
   cluster_bucket         = "tf-state-test-kalada-opuiyo"
+
+  deployCluster = "true"
 }
 
 module "kops_cluster" {
@@ -66,42 +68,14 @@ module "kops_cluster" {
   bastion                = "${var.bastion}"
   update_cluster         = "${local.update_cluster}"
   cluster_bucket         = "${local.cluster_bucket}"
-
-  cluster_key    = "${local.cluster_key}"
-  cluster_region = "${local.cluster_region}"
-
-  enable_dns_support   = true
-  enable_dns_hostnames = true
-  instance_tenancy     = "default"
-
-  availability_zone = ""
-
-  # private and/or public
-  route_tables = ["public", "private"]
-
-  ##########################################################################
-  # Subnets
-  ##########################################################################
-  vpc_cidr = "10.0.0.0/16"
-
-  # If a private route table is needed set to true and create a subnet called nat for the nat gateway
-  # (index_number)-name_of_subnet
-  create_nat_gateway = false
-
-  subnets = {
-    "1-public" = {
-      cidr_block = "10.0.32.0/24"
-      type       = "private"
-    }
-
-    "2-private" = {
-      cidr_block = "10.0.16.0/24"
-      type       = "public"
-    }
-
-    # "3-nat" = {
-    #   cidr_block = "10.0.64.0/24"
-    #   type       = "public"
-    # }
-  }
+  cluster_key            = "${local.cluster_key}"
+  cluster_region         = "${local.cluster_region}"
+  enable_dns_support     = "${var.enable_dns_support}"
+  enable_dns_hostnames   = "${var.enable_dns_hostnames}"
+  instance_tenancy       = "${var.instance_tenancy}"
+  availability_zone      = "${var.availability_zone}"
+  route_tables           = "${var.route_tables}"
+  vpc_cidr               = "${var.vpc_cidr}"
+  subnets                = "${var.subnets}"
+  deployCluster          = "${local.deployCluster}"
 }

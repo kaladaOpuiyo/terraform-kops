@@ -194,6 +194,7 @@ data "template_file" "kops_init" {
     ssh_private_key        = "${module.kops_keypair.private_key_filepath}"
     bastion                = "${var.bastion}"
     update_cluster         = "${var.update_cluster}"
+    deployCluster          = "${var.deployCluster}"
   }
 }
 
@@ -205,8 +206,6 @@ resource "local_file" "kops_destroy" {
     command = "${self.filename}"
     when    = "destroy"
   }
-
-  depends_on = ["aws_s3_bucket.kops_state"]
 }
 
 data "template_file" "kops_destroy" {
@@ -239,6 +238,7 @@ data "template_file" "kops_tf" {
     cluster_bucket = "${var.cluster_bucket}"
     cluster_key    = "${var.cluster_key}"
     cluster_region = "${var.cluster_region}"
+    deployCluster  = "${var.deployCluster}"
     out            = "${var.out}"
   }
 }

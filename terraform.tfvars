@@ -10,7 +10,7 @@ master_volume_size = "20"
 
 master_zone = "us-east-1a,us-east-1b,us-east-1c"
 
-master_count = "3"
+master_count = "5"
 
 node_size = "t2.micro"
 
@@ -20,7 +20,7 @@ node_count = "3"
 
 zones = "us-east-1a,us-east-1b,us-east-1c"
 
-networking = "calico"
+networking = "flannel"
 
 network_cidr = "172.20.0.0/16"
 
@@ -55,3 +55,28 @@ cloud_labels = "Owner=Kalada Opuiyo"
 dns = "public"
 
 kubernetes_version = "v1.10.0"
+
+enable_dns_support = true
+
+enable_dns_hostnames = true
+
+instance_tenancy = "default"
+
+subnets = {
+  "1-public" = {
+    cidr_block = "10.0.32.0/24"
+    type       = "private"
+  }
+
+  "2-private" = {
+    cidr_block = "10.0.16.0/24"
+    type       = "public"
+  }
+}
+
+availability_zone = ""
+
+# private and/or public
+route_tables = ["public", "private"]
+
+vpc_cidr = "10.0.0.0/16"

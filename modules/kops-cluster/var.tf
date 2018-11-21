@@ -182,10 +182,6 @@ variable "availability_zone" {
   description = "availability_zone"
 }
 
-variable "create_nat_gateway" {
-  description = "create_nat_gateway"
-}
-
 variable "destination_cidr_block" {
   default = "0.0.0.0/0"
 }
@@ -200,4 +196,8 @@ variable "cluster_key" {
 
 variable "cluster_region" {
   description = "cluster_region"
+}
+
+variable "deployCluster" {
+  description = "deployCluster"
 }

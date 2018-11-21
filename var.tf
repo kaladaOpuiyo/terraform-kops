@@ -28,3 +28,16 @@ variable "bastion" {}
 variable "out" {}
 
 variable "ami" {}
+variable "enable_dns_support" {}
+variable "enable_dns_hostnames" {}
+variable "instance_tenancy" {}
+variable "vpc_cidr" {}
+variable "availability_zone" {}
+
+variable "subnets" {
+  default = {}
+}
+
+variable "route_tables" {
+  default = []
+}

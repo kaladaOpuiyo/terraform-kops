@@ -1,5 +1,8 @@
 #!/bin/bash 
 
+BACKEND_SET=$(cat ./${out}/kubernetes.tf | grep \"${cluster_bucket}\" > /dev/null && echo true || echo false )
+
+
 addRemoteState(){
   echo '<======addRemoteState======>'
 
@@ -19,12 +22,24 @@ applyKopsTerraform(){
 
     cd ./${out} && \
     terraform init -input=false && \
-    terraform plan -out=../tmp/kopsPlan.tfplan -input=false && \
-    terraform apply -input=false ../tmp/kopsPlan.tfplan
+    terraform plan -out=../tmp/kopsPlan.tfplan -input=false 
+
+    if [ ${deployCluster} = true ];
+       then
+          terraform apply -input=false ../tmp/kopsPlan.tfplan
+    fi
 }
 ########################################################################################################################
-  # Main
+# Main
 ########################################################################################################################
 
-addRemoteState
+ echo $BACKEND_SET
+
+if  [ $BACKEND_SET = false ];
+      then 
+          addRemoteState
+      else 
+          echo "backend already set"
+fi
+
 applyKopsTerraform

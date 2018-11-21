@@ -1,9 +1,6 @@
 #!/bin/bash 
 
 
-CLUSTER_EXIST=$( { kops get cluster --name=${kops_cluster_name} --state=${kops_state_store}; } 2>&1 | \
-grep "cluster not found \"${kops_cluster_name}\""  \
-&&  echo false || echo true )
 
 kopKeys(){
     echo '<======kopKeys======>'
@@ -83,11 +80,24 @@ kopsCreateTerraform(){
        --yes
    
 }
-
+ 
 
 ########################################################################################################################
   # Main
 ########################################################################################################################
+
+
+
+
+if [ ${deployCluster} = "false" ];
+    then
+         kops delete cluster --state=${kops_state_store} --yes --name=${kops_cluster_name} 
+fi
+
+
+CLUSTER_EXIST=$( { kops get cluster --name=${kops_cluster_name} --state=${kops_state_store}; } 2>&1 | \
+grep "cluster not found \"${kops_cluster_name}\""  \
+&&  echo false || echo true )
 
 echo "Cluster Exist":$CLUSTER_EXIST 
 
