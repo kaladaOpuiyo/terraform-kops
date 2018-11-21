@@ -6,8 +6,7 @@ kopKeys(){
 }
 
 kopsCreate(){
-
-         kops create cluster \
+create_cluster_output=$(kops create cluster \
              --name=${kops_cluster_name} \
              --state=${kops_state_store} \
              --image=${image} \
@@ -34,10 +33,16 @@ kopsCreate(){
              --kubernetes-version=${kubernetes_version} \
              --dry-run=${dry_run} \
              --dns=${dns} \
-             --cloud-labels=${cloud_labels} \
+             --cloud-labels="${cloud_labels}" \
              --cloud=${cloud} \
              --ssh-public-key=${ssh_public_key} \
-             --yes > ./config/${kops_cluster_name}.yaml 
+             --yes)
+        # echo $create_cluster_output
+        if ( echo $create_cluster_output | grep -q "apiVersion: kops/v1alpha2" )
+            then
+                echo $create_cluster_output > ./config/${kops_cluster_name}.yaml  
+        fi
+            #  > ./config/${kops_cluster_name}.yaml 
  
          if  [ ${dry_run} = "true" ]; 
              then 
@@ -51,7 +56,7 @@ kopsCreate(){
 
 kopsUpdate(){
           echo "Still working out the kinks regarding generating an updated kops config file programmatically and then updating the cluster with those changes"
-          echo "Considering using blue/green deployments do below command will be uncessary" 
+          echo "Considering using blue/green deployments to do below, command will be unecessary" 
           echo "COMMAND NOT EXECUTED: aws s3 --recursive  mv ${kops_state_store}/${kops_cluster_name} ${kops_state_store}/${kops_cluster_name}"$(date "+%m-%d-%y:%H:%M:%S")"_bak" 
           echo "COMMAND NOT EXECUTED: kops create secret --name ${kops_cluster_name} sshpublickey core -i ${ssh_public_key} --state=${kops_state_store}"
           echo "COMMAND NOT EXECUTED: kops update cluster ${kops_cluster_name} --ssh-public-key=${ssh_public_key} --state=${kops_state_store} --yes"

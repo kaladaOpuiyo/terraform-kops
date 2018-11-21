@@ -140,3 +140,11 @@ variable "update_cluster" {
 variable "keypair_name" {
   description = "keypair_name"
 }
+
+variable "ami" {
+  description = "ami"
+}
+
+variable "domain_name" {
+  description = "domain_name"
+}

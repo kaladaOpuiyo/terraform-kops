@@ -8,7 +8,7 @@ kopsDestroy(){
             echo "dry run nothing to destroy";exit 0
         else
             kops delete cluster --state=${kops_state_store} --yes --name=${kops_cluster_name}
-            rm -rf out/
+          
     fi
    
 }

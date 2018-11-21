@@ -12,16 +12,24 @@ terraform {
 }
 
 locals {
-  update_cluster         = "false"
+  # update_cluster should always be false for now. 
+  # Kops does not provided a simple way to programmatically update a cluster 
+  # still working on this ;)
+  update_cluster = "false"
+
   dry_run                = "false"
   keypair_name           = "cluster_kalada_opuiyo.com"
   kops_cluster_name      = "kaladaopuiyo.com"
+  domain_name            = "www.kaladaopuiyo.com"
   kops_state_bucket_name = "k8s.kaladaopuiyo.com"
 }
 
 module "kops_cluster" {
-  source                 = "./modules/kops-cluster"
+  source = "./modules/kops-cluster"
+
+  ami                    = "${var.ami}"
   kops_cluster_name      = "${terraform.workspace}.${local.kops_cluster_name}"
+  domain_name            = "${local.domain_name}"
   kops_state_bucket_name = "${local.kops_state_bucket_name}"
   region                 = "${var.region}"
   master_size            = "${var.master_size}"

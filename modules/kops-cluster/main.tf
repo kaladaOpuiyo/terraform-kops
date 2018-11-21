@@ -1,3 +1,9 @@
+data "aws_acm_certificate" "domain_cert" {
+  domain      = "${var.domain_name}"
+  types       = ["AMAZON_ISSUED"]
+  most_recent = true
+}
+
 module "kops_keypair" {
   source = "mitchellh/dynamic-keys/aws"
   name   = "${var.keypair_name}"
@@ -54,10 +60,6 @@ resource "aws_s3_bucket" "kops_state" {
   }
 }
 
-data "external" "kops_image" {
-  program = ["bash", "${path.module}/bin/kops_image.tpl"]
-}
-
 resource "local_file" "kops" {
   content  = "${data.template_file.kops.rendered}"
   filename = "${path.root}/tmp/${sha1(data.template_file.kops.rendered)}.sh"
@@ -71,7 +73,7 @@ data "template_file" "kops" {
   template = "${file("${path.module}/bin/kops.tpl")}"
 
   vars = {
-    image                  = "${data.external.kops_image.result.hvm}"
+    image                  = "${var.ami}"
     kops_cluster_name      = "${var.kops_cluster_name}"
     kops_state_bucket_name = "${var.kops_state_bucket_name}"
     kops_state_store       = "s3://${replace(aws_s3_bucket.kops_state.arn,"arn:aws:s3:::","")}"
@@ -90,7 +92,7 @@ data "template_file" "kops" {
     topology               = "${var.topology}"
     admin_access           = "${var.admin_access}"
     api_loadbalancer_type  = "${var.api_loadbalancer_type}"
-    api_ssl_certificate    = "${var.api_ssl_certificate}"
+    api_ssl_certificate    = "${var.api_loadbalancer_type == "" ?"":data.aws_acm_certificate.domain_cert.arn}"
     associate_public_ip    = "${var.associate_public_ip}"
     authorization          = "${var.authorization}"
     cloud                  = "${var.cloud}"

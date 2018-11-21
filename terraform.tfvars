@@ -1,14 +1,16 @@
 target = "terraform"
 
-master_size = "t2.medium"
+ami = "ami-03ed1c12a1dd84320"
+
+master_size = "t2.micro"
 
 master_volume_size = "20"
 
-master_zone = "us-east-1a"
+master_zone = "us-east-1a,us-east-1b,us-east-1c"
 
-master_count = "1"
+master_count = "3"
 
-node_size = "t2.medium"
+node_size = "t2.micro"
 
 node_volume_size = "20"
 
@@ -16,7 +18,7 @@ node_count = "3"
 
 zones = "us-east-1a,us-east-1b,us-east-1c"
 
-networking = "calico"
+networking = "flannel"
 
 network_cidr = "172.20.0.0/16"
 
@@ -46,7 +48,7 @@ bastion = "false"
 
 admin_access = "0.0.0.0/0"
 
-cloud_labels = ""
+cloud_labels = "Owner=Kalada Opuiyo"
 
 dns = "public"
 
