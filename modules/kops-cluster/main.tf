@@ -153,6 +153,8 @@ resource "local_file" "kops_init" {
   provisioner "local-exec" {
     command = "${self.filename}"
   }
+
+  depends_on = ["aws_s3_bucket.kops_state"]
 }
 
 data "template_file" "kops_init" {
@@ -195,6 +197,7 @@ data "template_file" "kops_init" {
     bastion                = "${var.bastion}"
     update_cluster         = "${var.update_cluster}"
     deployCluster          = "${var.deployCluster}"
+    path_root              = "${path.root}"
   }
 }
 
@@ -215,6 +218,7 @@ data "template_file" "kops_destroy" {
     kops_state_store  = "s3://${replace(aws_s3_bucket.kops_state.arn,"arn:aws:s3:::","")}"
     kops_cluster_name = "${var.kops_cluster_name}"
     dry_run           = "${var.dry_run}"
+    path_root         = "${path.root}"
     out               = "${var.out}"
   }
 }
@@ -228,7 +232,7 @@ resource "local_file" "kops_tf" {
     command = "${self.filename}"
   }
 
-  depends_on = ["local_file.kops_init"]
+  depends_on = ["local_file.kops_update"]
 }
 
 data "template_file" "kops_tf" {
@@ -240,5 +244,65 @@ data "template_file" "kops_tf" {
     cluster_region = "${var.cluster_region}"
     deployCluster  = "${var.deployCluster}"
     out            = "${var.out}"
+    path_root      = "${path.root}"
+    run_check      = "${path.root}/tmp/${sha1(data.template_file.kops_update.rendered)}.sh"
+  }
+}
+
+resource "local_file" "kops_update" {
+  count    = "${var.dry_run=="false"?1:0}"
+  content  = "${data.template_file.kops_update.rendered}"
+  filename = "${path.root}/tmp/${sha1(data.template_file.kops_update.rendered)}.sh"
+
+  provisioner "local-exec" {
+    command = "${self.filename}"
+  }
+
+  depends_on = ["local_file.kops_init"]
+}
+
+data "template_file" "kops_update" {
+  template = "${file("${path.module}/bin/kops_update.tpl")}"
+
+  vars = {
+    run_check = "${path.root}/tmp/${sha1(data.template_file.kops_init.rendered)}.sh"
+    path_root = "${path.root}"
+
+    # image                  = "${var.ami}"
+    # kops_cluster_name      = "${var.kops_cluster_name}"
+    # kops_state_bucket_name = "${var.kops_state_bucket_name}"
+    # kops_state_store       = "s3://${replace(aws_s3_bucket.kops_state.arn,"arn:aws:s3:::","")}"
+    # master_size            = "${var.master_size}"
+    # master_count           = "${var.master_count}"
+    # master_zone            = "${var.master_zone}"
+    # master_volume_size     = "${var.master_volume_size}"
+    # node_size              = "${var.node_size}"
+    # node_count             = "${var.node_count}"
+    # node_volume_size       = "${var.node_volume_size}"
+    # zones                  = "${var.zones}"
+    # networking             = "${var.networking}"
+    # vpc                    = "${aws_vpc.kops_vpc.id}"
+    # topology               = "${var.topology}"
+    # network_cidr           = "${aws_vpc.kops_vpc.cidr_block}"
+    # topology               = "${var.topology}"
+    # admin_access           = "${var.admin_access}"
+    # api_loadbalancer_type  = "${var.api_loadbalancer_type}"
+    # api_ssl_certificate    = "${var.api_loadbalancer_type == "" ?"":data.aws_acm_certificate.domain_cert.arn}"
+    # associate_public_ip    = "${var.associate_public_ip}"
+    # authorization          = "${var.authorization}"
+    # cloud                  = "${var.cloud}"
+    # cloud_labels           = "${var.cloud_labels}"
+    # dns                    = "${var.dns}"
+    # dry_run                = "${var.dry_run}"
+    # encrypt_etcd_storage   = "${var.encrypt_etcd_storage}"
+    # kubernetes_version     = "${var.kubernetes_version}"
+    # out                    = "${var.out}"
+    # ssh_public_key         = "${module.kops_keypair.public_key_filepath}"
+    # ssh_private_key        = "${module.kops_keypair.private_key_filepath}"
+    # bastion                = "${var.bastion}"
+    # update_cluster         = "${var.update_cluster}"
+    # deployCluster          = "${var.deployCluster}"
+    # out                    = "${var.out}"
+    # target                 = "${var.target}"
   }
 }

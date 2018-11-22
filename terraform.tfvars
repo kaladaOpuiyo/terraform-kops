@@ -4,13 +4,13 @@ out = ".kops-tf"
 
 ami = "ami-03ed1c12a1dd84320"
 
-master_size = "t2.micro"
+master_size = "t2.medium"
 
 master_volume_size = "20"
 
-master_zone = "us-east-1a,us-east-1b,us-east-1c"
+master_zone = "us-east-1a,us-east-1b,us-east-1d"
 
-master_count = "5"
+master_count = "3"
 
 node_size = "t2.micro"
 
@@ -18,9 +18,9 @@ node_volume_size = "20"
 
 node_count = "3"
 
-zones = "us-east-1a,us-east-1b,us-east-1c"
+zones = "us-east-1a,us-east-1c,us-east-1f"
 
-networking = "flannel"
+networking = "calico"
 
 network_cidr = "172.20.0.0/16"
 
@@ -54,7 +54,7 @@ cloud_labels = "Owner=Kalada Opuiyo"
 
 dns = "public"
 
-kubernetes_version = "v1.10.0"
+kubernetes_version = "v1.11.0"
 
 enable_dns_support = true
 
