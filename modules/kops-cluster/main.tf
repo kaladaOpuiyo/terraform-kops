@@ -239,13 +239,15 @@ data "template_file" "kops_tf" {
   template = "${file("${path.module}/bin/kops_tf.tpl")}"
 
   vars {
-    cluster_bucket = "${var.cluster_bucket}"
-    cluster_key    = "${var.cluster_key}"
-    cluster_region = "${var.cluster_region}"
-    deployCluster  = "${var.deployCluster}"
-    out            = "${var.out}"
-    path_root      = "${path.root}"
-    run_check      = "${path.root}/tmp/${sha1(data.template_file.kops_update.rendered)}.sh"
+    cluster_bucket    = "${var.cluster_bucket}"
+    cluster_key       = "${var.cluster_key}"
+    cluster_region    = "${var.cluster_region}"
+    deployCluster     = "${var.deployCluster}"
+    out               = "${var.out}"
+    path_root         = "${path.root}"
+    kops_cluster_name = "${var.kops_cluster_name}"
+    kops_state_store  = "s3://${replace(aws_s3_bucket.kops_state.arn,"arn:aws:s3:::","")}"
+    run_check         = "${path.root}/tmp/${sha1(data.template_file.kops_update.rendered)}.sh"
   }
 }
 

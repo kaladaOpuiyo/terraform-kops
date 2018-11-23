@@ -3,13 +3,6 @@ provider "aws" {
   version = "~> 1.45"
 }
 
-provider "helm" {
-  install_tiller = true
-
-  service_account = "kube-system"
-  kubernetes      = {}
-}
-
 terraform {
   backend "s3" {
     bucket = "tf-state-test-kalada-opuiyo"
@@ -89,13 +82,16 @@ module "kops_cluster" {
   deployCluster          = "${local.deployCluster}"
 }
 
-module "kops_utilities" {
-  source = "./modules/kops-utilities"
+# module "kops_utilities" {
+#   source = "./modules/kops-utilities"
 
-  kops_cluster_name = "${terraform.workspace}.${local.kops_cluster_name}"
-  install_utilities = "${local.install_utilities}"
 
-  depends_on = [
-    "${module.kops_cluster.cluster_exist}",
-  ]
-}
+#   kops_cluster_name = "${terraform.workspace}.${local.kops_cluster_name}"
+#   install_utilities = "${local.install_utilities}"
+
+
+#   depends_on = [
+#     "${module.kops_cluster.cluster_exist}",
+#   ]
+# }
+

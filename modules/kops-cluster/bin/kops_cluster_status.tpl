@@ -1,10 +1,5 @@
 #!/bin/bash 
 
-# CLUSTER_EXIST=$( { kops get cluster --name=${kops_cluster_name} --state=${kops_state_store}; } 2>&1 | grep "cluster not found \"${kops_cluster_name}\"" )
-
-# echo $CLUSTER_EXIST
-
-
 # Exit if any of the intermediate steps fail
 set -e
 
