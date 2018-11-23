@@ -306,3 +306,26 @@ data "template_file" "kops_update" {
     # target                 = "${var.target}"
   }
 }
+
+data "template_file" "kops_cluster_status" {
+  template = "${file("${path.module}/bin/kops_cluster_status.tpl")}"
+
+  vars {
+    kops_cluster_name = "${var.kops_cluster_name}"
+    kops_state_store  = "s3://${replace(aws_s3_bucket.kops_state.arn,"arn:aws:s3:::","")}"
+  }
+}
+
+data "external" "check_if_cluster_exist" {
+  program    = ["${path.root}/tmp/${sha1(data.template_file.kops_cluster_status.rendered)}.sh"]
+  depends_on = ["local_file.kops_cluster_status"]
+}
+
+resource "local_file" "kops_cluster_status" {
+  content  = "${data.template_file.kops_cluster_status.rendered}"
+  filename = "${path.root}/tmp/${sha1(data.template_file.kops_cluster_status.rendered)}.sh"
+
+  provisioner "local-exec" {
+    command = "${self.filename}"
+  }
+}
