@@ -11,13 +11,22 @@ terraform {
   }
 }
 
+provider "helm" {
+  install_tiller  = false
+  namespace       = "kube-system"
+  enable_tls      = "false"
+  service_account = "tiller"
+  debug           = true
+
+  kubernetes {}
+}
+
 locals {
   # update_cluster should always be false for now. 
   # Kops does not provided a simple way to programmatically update a cluster 
   # still working on this ;) DOES NOTHING 
   update_cluster = "false"
 
-  dry_run                = "false"
   keypair_name           = "cluster_kalada_opuiyo.com"
   kops_cluster_name      = "kaladaopuiyo.com"
   domain_name            = "www.kaladaopuiyo.com"
@@ -26,9 +35,10 @@ locals {
   cluster_key            = "env:/${terraform.workspace}/kops-cluster"
   cluster_bucket         = "tf-state-test-kalada-opuiyo"
 
-  install_utilities = true
-
-  deployCluster = "true"
+  #DEPLOY 
+  dry_run           = "false"
+  install_utilities = 1
+  deployCluster     = "true"
 }
 
 module "kops_cluster" {
@@ -82,16 +92,13 @@ module "kops_cluster" {
   deployCluster          = "${local.deployCluster}"
 }
 
-# module "kops_utilities" {
-#   source = "./modules/kops-utilities"
+module "kops_utilities" {
+  source = "./modules/kops-utilities"
 
+  kops_cluster_name = "${terraform.workspace}.${local.kops_cluster_name}"
+  install_utilities = "${local.install_utilities}"
 
-#   kops_cluster_name = "${terraform.workspace}.${local.kops_cluster_name}"
-#   install_utilities = "${local.install_utilities}"
-
-
-#   depends_on = [
-#     "${module.kops_cluster.cluster_exist}",
-#   ]
-# }
-
+  depends_on = [
+    "${module.kops_cluster.cluster_exist}",
+  ]
+}
