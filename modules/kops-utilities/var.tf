@@ -10,3 +10,7 @@ variable "depends_on" {
   description = "depends_on"
   default     = []
 }
+
+variable "tiller_namespace" {
+  description = "tiller_namespace"
+}

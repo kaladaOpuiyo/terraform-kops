@@ -36,7 +36,8 @@ locals {
   cluster_bucket         = "tf-state-test-kalada-opuiyo"
 
   #DEPLOY 
-  dry_run           = "false"
+  dry_run = "false"
+
   install_utilities = 1
   deployCluster     = "true"
 }
@@ -97,6 +98,7 @@ module "kops_utilities" {
 
   kops_cluster_name = "${terraform.workspace}.${local.kops_cluster_name}"
   install_utilities = "${local.install_utilities}"
+  tiller_namespace  = "kube-system"
 
   depends_on = [
     "${module.kops_cluster.cluster_exist}",
