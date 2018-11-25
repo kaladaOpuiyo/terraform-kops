@@ -22,11 +22,6 @@ provider "helm" {
 }
 
 locals {
-  # update_cluster should always be false for now. 
-  # Kops does not provided a simple way to programmatically update a cluster 
-  # still working on this ;) DOES NOTHING 
-  update_cluster = "false"
-
   keypair_name           = "cluster_kalada_opuiyo.com"
   kops_cluster_name      = "kaladaopuiyo.com"
   domain_name            = "www.kaladaopuiyo.com"
@@ -35,11 +30,14 @@ locals {
   cluster_key            = "env:/${terraform.workspace}/kops-cluster"
   cluster_bucket         = "tf-state-test-kalada-opuiyo"
 
-  #DEPLOY 
+  #DEPLOY
   dry_run = "false"
 
   install_utilities = 1
   deployCluster     = "true"
+
+  ## VERY BUGGY, LEAVE FALSE FOR NOW!!! ###
+  update_cluster = "false"
 }
 
 module "kops_cluster" {

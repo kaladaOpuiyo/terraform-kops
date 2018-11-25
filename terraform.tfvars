@@ -4,21 +4,21 @@ out = ".kops-tf"
 
 ami = "ami-03ed1c12a1dd84320"
 
-master_size = "t2.medium"
+master_size = "t2.medium" #UPDATEABLE
 
-master_volume_size = "20"
+master_volume_size = "20" #UPDATEABLE
 
-master_zone = "us-east-1a,us-east-1b,us-east-1d"
+master_zone = "us-east-1a,us-east-1b,us-east-1c"
 
 master_count = "3"
 
-node_size = "t2.micro"
+node_size = "t2.medium" #UPDATEABLE
 
-node_volume_size = "20"
+node_volume_size = "20" #UPDATEABLE
 
-node_count = "3"
+node_count = "3" #UPDATEABLE
 
-zones = "us-east-1a,us-east-1c,us-east-1f"
+zones = "us-east-1a,us-east-1b,us-east-1c"
 
 networking = "calico"
 
@@ -62,6 +62,12 @@ enable_dns_hostnames = true
 
 instance_tenancy = "default"
 
+# private and/or public
+route_tables = ["public", "private"]
+
+vpc_cidr = "10.0.0.0/16"
+
+# NOT SETUP FUTURE UPGRADE - SUBNET MANAGEMENT
 subnets = {
   "1-public" = {
     cidr_block = "10.0.32.0/24"
@@ -75,8 +81,3 @@ subnets = {
 }
 
 availability_zone = ""
-
-# private and/or public
-route_tables = ["public", "private"]
-
-vpc_cidr = "10.0.0.0/16"

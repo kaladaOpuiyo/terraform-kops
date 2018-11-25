@@ -1,4 +1,4 @@
-#!/bin/bash 
+#!/bin/bash
 
 BACKEND_SET=$(cat ${path_root}/${out}/kubernetes.tf | grep \"${cluster_bucket}\" > /dev/null && echo true || echo false )
 HELM_PROVIDER_EXIST=$(cat ${path_root}/${out}/kubernetes.tf | grep helm > /dev/null && echo true || echo false )
@@ -56,7 +56,7 @@ addRemoteState(){
   echo '<======addRemoteState======>'
 
 if  [ $BACKEND_SET = false ];
-    then 
+    then
           sed '/^terraform.*$/r'<(
                   echo "  backend \"s3\" {"
                   echo "    bucket  =  \"${cluster_bucket}\""
@@ -66,11 +66,11 @@ if  [ $BACKEND_SET = false ];
               ) ${path_root}/${out}/kubernetes.tf > ${path_root}/tmp/kubernetes.tf.tmp
 
               mv -f ${path_root}/tmp/kubernetes.tf.tmp ${path_root}/${out}/kubernetes.tf
-    else 
+    else
            echo "backend already set"
 fi
 
- 
+
 }
 
 applyKopsTerraform(){
@@ -78,7 +78,7 @@ applyKopsTerraform(){
 
     cd ${path_root}/${out} && \
     terraform init -input=false && \
-    terraform plan -out=${path_root}/tmp/kopsPlan.tfplan -input=false 
+    terraform plan -out=${path_root}/tmp/kopsPlan.tfplan -input=false
 
     if [ ${deployCluster} = true ];
        then
@@ -86,14 +86,18 @@ applyKopsTerraform(){
     fi
 }
 
-
+rollingUpdate(){
+ echo '<======rollingUpdate======>'
+     if [ ${update_cluster} = true ];
+         then
+             kops rolling-update cluster --name=${kops_cluster_name} --state=${kops_state_store} --yes
+     fi
+}
 ########################################################################################################################
 # Main
 ########################################################################################################################
 
-
 addRemoteState
-
 addHelmProvider
-
 applyKopsTerraform
+rollingUpdate

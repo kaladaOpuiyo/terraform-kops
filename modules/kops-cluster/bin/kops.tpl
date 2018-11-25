@@ -1,4 +1,4 @@
-#!/bin/bash 
+#!/bin/bash
 
 
 
@@ -6,8 +6,8 @@ CLUSTER_DEPLOYED=$(echo "false")
 
 kopKeys(){
     echo '<======kopKeys======>'
-    cp -rf ${path_root}/keys ~/.ssh/ && 
-    chmod 400 ~/.ssh/keys/* 
+    cp -rf ${path_root}/keys ~/.ssh/ &&
+    chmod 400 ~/.ssh/keys/*
 }
 
 kopsCreateYamlConfig(){
@@ -44,11 +44,11 @@ kopsCreateYamlConfig(){
        --cloud-labels="${cloud_labels}" \
        --cloud=${cloud} \
        --ssh-public-key=${ssh_public_key} \
-       --yes > ./config/${kops_cluster_name}.yaml  
+       --yes > ./config/${kops_cluster_name}.yaml
 }
 
 kopsCreateTerraform(){
-    echo '<======kopsCreateTerraform======>' 
+    echo '<======kopsCreateTerraform======>'
     kops create cluster \
        --name=${kops_cluster_name} \
        --state=${kops_state_store} \
@@ -80,45 +80,45 @@ kopsCreateTerraform(){
        --ssh-public-key=${ssh_public_key} \
        --out=${path_root}/${out} \
        --yes
-   
+
 }
- 
+
 
 ########################################################################################################################
   # Main
 ########################################################################################################################
 
 
-if [ ${deployCluster} = "false" ] && [ $CLUSTER_DEPLOYED = "false" ]; 
+if [ ${deployCluster} = false ] && [ $CLUSTER_DEPLOYED = false ];
     then
-        echo '<======CleanUpOfClusterTempData======>' 
-         
+        echo '<======CleanUpOfClusterTempData======>'
+
           cd ${path_root}/${out} && terraform destroy -auto-approve && \
-          kops delete cluster --state=${kops_state_store} --yes --name=${kops_cluster_name} 
+          kops delete cluster --state=${kops_state_store} --yes --name=${kops_cluster_name}
 fi
 
 CLUSTER_EXIST=$( { kops get cluster --name=${kops_cluster_name} --state=${kops_state_store}; } 2>&1 | \
 grep "cluster not found \"${kops_cluster_name}\""  \
 &&  echo false || echo true )
 
-    echo "Cluster Exist":$CLUSTER_EXIST 
+    echo "Cluster Exist":$CLUSTER_EXIST
 
     if ! [[ $CLUSTER_EXIST == true ]];
         then
-            if  [[ ${dry_run} == true ]]; 
-                then 
-                    kopsCreateYamlConfig 
+            if  [[ ${dry_run} == true ]];
+                then
+                    kopsCreateYamlConfig
                 else
-                
+
                     kopKeys
-                    kopsCreateYamlConfig 
-                    kopsCreateTerraform 
+                    kopsCreateYamlConfig
+                    kopsCreateTerraform
             fi
-        else 
+        else
                 echo "FUCK!!! NEED TO MANUALLY HANDLE KOPS UPDATES"
                 echo "............................................"
                 echo "I GOT YOU :)"
-                echo true > ${path_root}/tmp/kops_update 
+                echo "update requested" $(date) >> ${path_root}/tmp/kops_update
     fi
 
 
