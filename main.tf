@@ -22,9 +22,12 @@ provider "helm" {
 }
 
 locals {
-  keypair_name           = "cluster_kalada_opuiyo.com"
-  kops_cluster_name      = "kaladaopuiyo.com"
-  domain_name            = "www.kaladaopuiyo.com"
+  keypair_name      = "cluster_kalada_opuiyo.com"
+  kops_cluster_name = "kaladaopuiyo.com"
+
+  #Used to retrive the dommain certificate info
+  domain_name = "www.kaladaopuiyo.com"
+
   kops_state_bucket_name = "k8s.kaladaopuiyo.com"
   cluster_region         = "us-east-1"
   cluster_key            = "env:/${terraform.workspace}/kops-cluster"
