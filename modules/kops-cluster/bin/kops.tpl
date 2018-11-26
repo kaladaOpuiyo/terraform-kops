@@ -89,7 +89,7 @@ kopsCreateTerraform(){
 ########################################################################################################################
 
 
-if [ ${deployCluster} = false ] && [ $CLUSTER_DEPLOYED = false ];
+if [ ${deploy_cluster} = false ] && [ $CLUSTER_DEPLOYED = false ];
     then
         echo '<======CleanUpOfClusterTempData======>'
 

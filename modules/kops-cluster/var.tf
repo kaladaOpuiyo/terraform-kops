@@ -198,6 +198,6 @@ variable "cluster_region" {
   description = "cluster_region"
 }
 
-variable "deployCluster" {
-  description = "deployCluster"
+variable "deploy_cluster" {
+  description = "deploy_cluster"
 }

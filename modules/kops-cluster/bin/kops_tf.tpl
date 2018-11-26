@@ -80,7 +80,7 @@ applyKopsTerraform(){
     terraform init -input=false && \
     terraform plan -out=${path_root}/tmp/kopsPlan.tfplan -input=false
 
-    if [ ${deployCluster} = true ];
+    if [ ${deploy_cluster} = true ];
        then
           terraform apply -input=false ${path_root}/tmp/kopsPlan.tfplan
     fi
@@ -97,7 +97,7 @@ sleep 30
             --fail-on-validate-error="false" \
             --master-interval=8m \
             --node-interval=8m \
-              --name=${kops_cluster_name} --state=${kops_state_store} --yes --cloudonly\
+              --name=${kops_cluster_name} --state=${kops_state_store} --yes --cloudonly --force\
             && break || sleep 5; done;
 
      fi

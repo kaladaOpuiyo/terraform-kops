@@ -37,10 +37,10 @@ locals {
   dry_run = "false"
 
   install_utilities = 1
-  deployCluster     = "true"
+  deploy_cluster    = "true"
 
   ## VERY BUGGY, LEAVE FALSE FOR NOW!!! ###
-  update_cluster = "true"
+  update_cluster = "false"
 }
 
 module "kops_cluster" {
@@ -91,7 +91,7 @@ module "kops_cluster" {
   route_tables           = "${var.route_tables}"
   vpc_cidr               = "${var.vpc_cidr}"
   subnets                = "${var.subnets}"
-  deployCluster          = "${local.deployCluster}"
+  deploy_cluster         = "${local.deploy_cluster}"
 }
 
 module "kops_utilities" {

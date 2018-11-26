@@ -27,7 +27,7 @@ network_cidr = "172.20.0.0/16"
 
 topology = "private"
 
-api_loadbalancer_type = ""
+api_loadbalancer_type = "internal"
 
 associate_public_ip = "true"
 
