@@ -21,11 +21,11 @@ node_count = "3" #UPDATEABLE
 
 zones = "us-east-1a,us-east-1b,us-east-1c"
 
-networking = "flannel"
+networking = "calico"
 
 network_cidr = "172.20.0.0/16"
 
-topology = "public"
+topology = "private"
 
 api_loadbalancer_type = ""
 
@@ -47,7 +47,7 @@ force_destroy = "true"
 
 acl = "private"
 
-bastion = "false"
+bastion = "true"
 
 admin_access = "0.0.0.0/0"
 

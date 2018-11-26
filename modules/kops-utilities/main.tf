@@ -25,3 +25,10 @@ module "consul" {
   tiller_namespace  = "${var.tiller_namespace}"
   install_utilities = "${var.install_utilities}"
 }
+
+module "kube2iam" {
+  source = "./modules/kube2iam"
+
+  tiller_namespace  = "${var.tiller_namespace}"
+  install_utilities = "${var.install_utilities}"
+}

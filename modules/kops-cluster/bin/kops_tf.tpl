@@ -89,13 +89,17 @@ applyKopsTerraform(){
 
 
 rollingUpdate(){
-
+sleep 30
  echo '<======rollingUpdate======>'
      if [ ${update_cluster} = true ] || [ ${need_update} = true ];
          then
-             kops rolling-update cluster --name=${kops_cluster_name} --state=${kops_state_store} --yes \
-              --master-interval=8m \
-              --node-interval=8m
+            while [ 1 ]; do kops rolling-update cluster \
+            --fail-on-validate-error="false" \
+            --master-interval=8m \
+            --node-interval=8m \
+              --name=${kops_cluster_name} --state=${kops_state_store} --yes --cloudonly\
+            && break || sleep 5; done;
+
      fi
 }
 ########################################################################################################################
