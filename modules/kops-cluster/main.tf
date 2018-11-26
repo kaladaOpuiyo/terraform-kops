@@ -1,5 +1,5 @@
 ##########################################################################
-# CERTS & KEYS 
+# CERTS & KEYS
 ##########################################################################
 data "aws_acm_certificate" "domain_cert" {
   domain      = "${var.domain_name}"
@@ -69,9 +69,9 @@ resource "aws_internet_gateway" "kops_igw" {
 
 #   destination_cidr_block = "${var.destination_cidr_block}"
 
-#   gateway_id = "${element(var.route_tables, count.index) 
-#                               == "public"  ? data.aws_internet_gateway.kops_igw.id: 
-#                   element(var.route_tables, count.index) 
+#   gateway_id = "${element(var.route_tables, count.index)
+#                               == "public"  ? data.aws_internet_gateway.kops_igw.id:
+#                   element(var.route_tables, count.index)
 #                               == "private" ? "${join("",data.aws_nat_gateway.kops_ngw.*.id)}": "" }"
 # }
 
@@ -79,16 +79,16 @@ resource "aws_internet_gateway" "kops_igw" {
 #   count     = "${length(var.subnets)}"
 #   subnet_id = "${element(aws_subnet.aux_subnet.*.id, count.index)}"
 
-#   route_table_id = "${lookup(var.subnets["${element("${keys(var.subnets)}",count.index)}"], "type")  
-#                       == "public" ?join("",data.aws_route_table.public.*.id): 
-#                       lookup(var.subnets["${element("${keys(var.subnets)}",count.index)}"], "type")  
+#   route_table_id = "${lookup(var.subnets["${element("${keys(var.subnets)}",count.index)}"], "type")
+#                       == "public" ?join("",data.aws_route_table.public.*.id):
+#                       lookup(var.subnets["${element("${keys(var.subnets)}",count.index)}"], "type")
 #                       == "private" ?join("",data.aws_route_table.private.*.id): ""  }"
 
 #   depends_on = ["aws_route_table.aux_route_table", "aws_subnet.aux_subnet"]
 # }
 
 #############################################################################
-# IAM  
+# IAM
 #############################################################################
 resource "aws_iam_group" "kops" {
   name = "kops"
@@ -144,7 +144,7 @@ resource "aws_s3_bucket" "kops_state" {
 }
 
 ##########################################################################
-# Local Magic
+# Local Auto Magic
 ##########################################################################
 resource "local_file" "kops_init" {
   count    = "${var.update_cluster=="true" ? 0 : 1}"
@@ -231,7 +231,8 @@ resource "local_file" "kops_tf" {
   filename = "${path.root}/tmp/${sha1(data.template_file.kops_tf.rendered)}.sh"
 
   provisioner "local-exec" {
-    command = "${self.filename}"
+    command    = "${self.filename}"
+    on_failure = "continue"
   }
 
   depends_on = ["local_file.kops_update", "local_file.kops_init"]
@@ -251,6 +252,7 @@ data "template_file" "kops_tf" {
     kops_state_store  = "s3://${replace(aws_s3_bucket.kops_state.arn,"arn:aws:s3:::","")}"
     run_check         = "${path.root}/tmp/${sha1(data.template_file.kops_update.rendered)}.sh"
     update_cluster    = "${var.update_cluster}"
+    need_update       = "${data.external.check_if_cluster_needs_rolling_update.result["ROLLING_UPDATE"]}"
   }
 }
 
@@ -330,6 +332,29 @@ data "external" "check_if_cluster_exist" {
 resource "local_file" "kops_cluster_status" {
   content  = "${data.template_file.kops_cluster_status.rendered}"
   filename = "${path.root}/tmp/${sha1(data.template_file.kops_cluster_status.rendered)}.sh"
+
+  provisioner "local-exec" {
+    command = "${self.filename}"
+  }
+}
+
+data "external" "check_if_cluster_needs_rolling_update" {
+  program    = ["${path.root}/tmp/${sha1(data.template_file.kops_cluster_rolling_update.rendered)}.sh"]
+  depends_on = ["local_file.kops_cluster_rolling_update"]
+}
+
+data "template_file" "kops_cluster_rolling_update" {
+  template = "${file("${path.module}/bin/kops_cluster_rolling_update.tpl")}"
+
+  vars {
+    kops_cluster_name = "${var.kops_cluster_name}"
+    kops_state_store  = "s3://${replace(aws_s3_bucket.kops_state.arn,"arn:aws:s3:::","")}"
+  }
+}
+
+resource "local_file" "kops_cluster_rolling_update" {
+  content  = "${data.template_file.kops_cluster_rolling_update.rendered}"
+  filename = "${path.root}/tmp/${sha1(data.template_file.kops_cluster_rolling_update.rendered)}.sh"
 
   provisioner "local-exec" {
     command = "${self.filename}"

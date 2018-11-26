@@ -2,13 +2,11 @@
 RUN_CHECK=${run_check}
 
 
-  
-# Need to write update process here runcheck is a trigger from changes to kops_init.
-# This is going to be fun. May move the terraform out command to this
-# Proposed steps 
 # - Generate Yaml from Template ->  kops toolbox template (This is the most challanging thing about all this) [generateTemplate]
 # - Replace Config Yaml ->  kops replace -f [replaceCluster]
 # - Update Terraform -> kops update cluster --target=terraform [updateClusterTerraform]
+
+
 generateTemplate(){
     echo '<======kopsCreateYamlConfig======>'
 
@@ -44,7 +42,7 @@ generateTemplate(){
        --cloud=${cloud} \
        --ssh-public-key=${ssh_public_key} \
        --yes >  ${path_root}/config/edited.${kops_cluster_name}.yaml
-  sed -i '' 's/'edited.${kops_cluster_name}'/'${kops_cluster_name}'/g'  ${path_root}/config/edited.${kops_cluster_name}.yaml  
+  sed -i '' 's/'edited.${kops_cluster_name}'/'${kops_cluster_name}'/g'  ${path_root}/config/edited.${kops_cluster_name}.yaml
 }
 
 
@@ -56,7 +54,7 @@ replaceCluster(){
 
 updateClusterTerraform(){
   echo '<======updateClusterTerraform======>'
-  kops update cluster --name=${kops_cluster_name} --state=${kops_state_store} --target=terraform  --out=${path_root}/${out} 
+  kops update cluster --name=${kops_cluster_name} --state=${kops_state_store} --target=terraform  --out=${path_root}/${out}
 }
 
 

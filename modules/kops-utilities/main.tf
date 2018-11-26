@@ -18,3 +18,10 @@ module "fluentd_elasticsearch" {
   tiller_namespace  = "${var.tiller_namespace}"
   install_utilities = "${var.install_utilities}"
 }
+
+module "consul" {
+  source = "./modules/consul"
+
+  tiller_namespace  = "${var.tiller_namespace}"
+  install_utilities = "${var.install_utilities}"
+}

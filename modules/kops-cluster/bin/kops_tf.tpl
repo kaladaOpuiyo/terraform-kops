@@ -86,11 +86,16 @@ applyKopsTerraform(){
     fi
 }
 
+
+
 rollingUpdate(){
+
  echo '<======rollingUpdate======>'
-     if [ ${update_cluster} = true ];
+     if [ ${update_cluster} = true ] || [ ${need_update} = true ];
          then
-             kops rolling-update cluster --name=${kops_cluster_name} --state=${kops_state_store} --yes
+             kops rolling-update cluster --name=${kops_cluster_name} --state=${kops_state_store} --yes \
+              --master-interval=8m \
+              --node-interval=8m
      fi
 }
 ########################################################################################################################

@@ -8,11 +8,12 @@ master_size = "t2.medium" #UPDATEABLE
 
 master_volume_size = "20" #UPDATEABLE
 
+#  "us-east-1a,us-east-1b,us-east-1c,us-east-1d,us-east-1f"
 master_zone = "us-east-1a,us-east-1b,us-east-1c"
 
 master_count = "3"
 
-node_size = "t2.medium" #UPDATEABLE
+node_size = "t2.micro" #UPDATEABLE
 
 node_volume_size = "20" #UPDATEABLE
 
@@ -20,7 +21,7 @@ node_count = "3" #UPDATEABLE
 
 zones = "us-east-1a,us-east-1b,us-east-1c"
 
-networking = "calico"
+networking = "flannel"
 
 network_cidr = "172.20.0.0/16"
 
@@ -62,12 +63,18 @@ enable_dns_hostnames = true
 
 instance_tenancy = "default"
 
+#VPC
+vpc_cidr = "10.0.0.0/16"
+
+######### NOT SETUP FUTURE UPGRADE - SUBNET MANAGEMENT #########
+
 # private and/or public
 route_tables = ["public", "private"]
 
-vpc_cidr = "10.0.0.0/16"
+# AZ
+availability_zone = ""
 
-# NOT SETUP FUTURE UPGRADE - SUBNET MANAGEMENT
+# SUBNETS
 subnets = {
   "1-public" = {
     cidr_block = "10.0.32.0/24"
@@ -79,5 +86,3 @@ subnets = {
     type       = "public"
   }
 }
-
-availability_zone = ""
