@@ -33,7 +33,7 @@ locals {
   cluster_key            = "env:/${terraform.workspace}/kops-cluster"
   cluster_bucket         = "tf-state-test-kalada-opuiyo"
 
-  #DEPLOY
+  #DEPLOY DO NOT ALTER MANUALLY!!!
   dry_run = "false"
 
   deploy_cluster = "true"

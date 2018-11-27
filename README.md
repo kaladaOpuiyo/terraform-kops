@@ -95,6 +95,8 @@ terraform destroy -target=module.kops_utilities
 - Added Rook
 - Determine approach for standardizing liveness and readyness probes
 - Calico Deep Dive
+- https://github.com/bitnami-labs/kubewatch
 - Research Issue
   - https://github.com/kubernetes/kops/issues/834 - This issues directly relates to ACM+ELB cluster creation.
   - https://github.com/kubernetes/kops/pull/5414 - related pull request
+  - https://github.com/ramitsurana/awesome-kubernetes
