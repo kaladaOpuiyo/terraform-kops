@@ -36,8 +36,9 @@ locals {
   #DEPLOY
   dry_run = "false"
 
-  install_utilities = 1
-  deploy_cluster    = "true"
+  deploy_cluster = "true"
+
+  install_utilities = true
 
   ## VERY BUGGY, LEAVE FALSE FOR NOW!!! ###
   update_cluster = "false"

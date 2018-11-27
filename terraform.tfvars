@@ -2,32 +2,32 @@ target = "terraform"
 
 out = ".kops-tf"
 
+#CoreOs AMI
 ami = "ami-03ed1c12a1dd84320"
 
-master_size = "t2.medium" #UPDATEABLE
+master_size = "t2.medium"
 
-master_volume_size = "20" #UPDATEABLE
+master_volume_size = "20"
 
-#  "us-east-1a,us-east-1b,us-east-1c,us-east-1d,us-east-1f"
-master_zone = "us-east-1a,us-east-1b,us-east-1c"
+master_zone = "us-east-1a,us-east-1b,us-east-1d"
 
 master_count = "3"
 
-node_size = "t2.micro" #UPDATEABLE
+node_size = "t2.micro"
 
-node_volume_size = "20" #UPDATEABLE
+node_volume_size = "20"
 
-node_count = "3" #UPDATEABLE
+node_count = "3"
 
-zones = "us-east-1a,us-east-1b,us-east-1c"
+zones = "us-east-1a,us-east-1c,us-east-1f"
 
 networking = "calico"
 
-network_cidr = "172.20.0.0/16"
+network_cidr = "10.0.0.0/16"
 
-topology = "private"
+topology = "public"
 
-api_loadbalancer_type = "internal"
+api_loadbalancer_type = ""
 
 associate_public_ip = "true"
 
@@ -47,7 +47,7 @@ force_destroy = "true"
 
 acl = "private"
 
-bastion = "true"
+bastion = "false"
 
 admin_access = "0.0.0.0/0"
 
@@ -63,18 +63,10 @@ enable_dns_hostnames = true
 
 instance_tenancy = "default"
 
-#VPC
 vpc_cidr = "10.0.0.0/16"
 
 ######### NOT SETUP FUTURE UPGRADE - SUBNET MANAGEMENT #########
 
-# private and/or public
-route_tables = ["public", "private"]
-
-# AZ
-availability_zone = ""
-
-# SUBNETS
 subnets = {
   "1-public" = {
     cidr_block = "10.0.32.0/24"
@@ -86,3 +78,8 @@ subnets = {
     type       = "public"
   }
 }
+
+availability_zone = ""
+
+# private and/or public
+route_tables = ["public", "private"]

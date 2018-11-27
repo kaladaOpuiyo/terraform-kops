@@ -1,5 +1,6 @@
 resource "helm_release" "rook" {
-  count     = "${var.install_utilities}"
+  count = "${var.install_utilities == true ? 1: 0}"
+
   name      = "rook"
   chart     = "http://charts.rook.io/stable"
   namespace = "${var.tiller_namespace}"
@@ -10,7 +11,7 @@ resource "helm_release" "rook" {
 }
 
 resource "kubernetes_cluster_role_binding" "rook" {
-  count = "${var.install_utilities}"
+  count = "${var.install_utilities == true ? 1: 0}"
 
   metadata {
     name = "rook"

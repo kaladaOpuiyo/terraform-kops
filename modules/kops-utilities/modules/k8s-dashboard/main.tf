@@ -1,5 +1,6 @@
 resource "helm_release" "k8s_dashboard" {
-  count     = "${var.install_utilities}"
+  count = "${var.install_utilities == true ? 1: 0}"
+
   name      = "kubernetes-dashboard"
   chart     = "stable/kubernetes-dashboard"
   namespace = "${var.tiller_namespace}"
@@ -10,7 +11,7 @@ resource "helm_release" "k8s_dashboard" {
 }
 
 resource "kubernetes_cluster_role_binding" "k8s_dashboard" {
-  count = "${var.install_utilities}" #  
+  count = "${var.install_utilities == true ? 1: 0}"
 
   metadata {
     name = "kubernetes-dashboard"

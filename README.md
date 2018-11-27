@@ -62,7 +62,7 @@ terraform apply -target=module.kops_cluster -auto-approve
 _Please Note:user will depending on image coreos used here_
 
 ```bash
-ssh core@{api or bastion}.{terraform.workspace}.{kops_cluster_name} -i ~/.ssh/keys/{keypair_name}.pem
+ssh core@{api or bastion}.{terraform.workspace}.{kops_cluster_name} -i {project.root}/keys/{keypair_name}.pem
 ```
 
 **Delete Cluster**
@@ -95,3 +95,6 @@ terraform destroy -target=module.kops_utilities
 - Added Rook
 - Determine approach for standardizing liveness and readyness probes
 - Calico Deep Dive
+- Research Issue
+  - https://github.com/kubernetes/kops/issues/834 - This issues directly relates to ACM+ELB cluster creation.
+  - https://github.com/kubernetes/kops/pull/5414 - related pull request

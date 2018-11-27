@@ -4,12 +4,6 @@
 
 CLUSTER_DEPLOYED=$(echo "false")
 
-kopKeys(){
-    echo '<======kopKeys======>'
-    cp -rf ${path_root}/keys ~/.ssh/ &&
-    chmod 400 ~/.ssh/keys/*
-}
-
 kopsCreateYamlConfig(){
     echo '<======kopsCreateYamlConfig======>'
 
@@ -110,15 +104,12 @@ grep "cluster not found \"${kops_cluster_name}\""  \
                     kopsCreateYamlConfig
                 else
 
-                    kopKeys
                     kopsCreateYamlConfig
                     kopsCreateTerraform
             fi
         else
-                echo "FUCK!!! NEED TO MANUALLY HANDLE KOPS UPDATES"
-                echo "............................................"
-                echo "I GOT YOU :)"
                 echo "update requested" $(date) >> ${path_root}/tmp/kops_update
     fi
+
 
 

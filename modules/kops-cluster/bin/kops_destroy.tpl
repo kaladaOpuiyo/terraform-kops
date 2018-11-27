@@ -20,7 +20,7 @@ echo '<======fileCleanUp======>'
     rm -rf ${path_root}/config
     rm -rf ${path_root}/keys
     rm -rf ${path_root}/tmp
-    rm -rf ~/.ssh/keys
+
 }
 ########################################################################################################################
   # Main

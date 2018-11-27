@@ -1,5 +1,6 @@
 resource "helm_release" "kube2iam" {
-  count     = "${var.install_utilities}"
+  count = "${var.install_utilities == true ? 1: 0}"
+
   name      = "kube2iam"
   chart     = "stable/kube2iam"
   namespace = "${var.tiller_namespace}"
@@ -10,7 +11,7 @@ resource "helm_release" "kube2iam" {
 }
 
 resource "kubernetes_cluster_role_binding" "kube2iam" {
-  count = "${var.install_utilities}"
+  count = "${var.install_utilities == true ? 1: 0}"
 
   metadata {
     name = "kube2iam"
