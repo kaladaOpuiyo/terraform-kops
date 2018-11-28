@@ -12,90 +12,84 @@ terraform {
 }
 
 provider "helm" {
+  debug           = true
+  enable_tls      = "false"
   install_tiller  = false
   namespace       = "kube-system"
-  enable_tls      = "false"
   service_account = "tiller"
-  debug           = true
 
   kubernetes {}
 }
 
 locals {
-  keypair_name      = "cluster_kalada_opuiyo.com"
-  kops_cluster_name = "kaladaopuiyo.com"
+  cluster_bucket = "tf-state-test-kalada-opuiyo"
+  cluster_key    = "env:/${terraform.workspace}/kops-cluster"
+  cluster_region = "us-east-1"
 
   #Used to retrive the dommain certificate info
-  domain_name = "www.kaladaopuiyo.com"
-
-  kops_state_bucket_name = "k8s.kaladaopuiyo.com"
-  cluster_region         = "us-east-1"
-  cluster_key            = "env:/${terraform.workspace}/kops-cluster"
-  cluster_bucket         = "tf-state-test-kalada-opuiyo"
+  domain_name            = "www.kaladaopuiyo.com"
   install_utilities      = true
-
-  #DEPLOY DO NOT ALTER MANUALLY!!!
-  dry_run_kops        = "false"
-  deploy_cluster_kops = "true"
-  update_cluster_kops = "false"
+  keypair_name           = "cluster_kalada_opuiyo.com"
+  kops_cluster_name      = "kaladaopuiyo.com"
+  kops_state_bucket_name = "k8s.kaladaopuiyo.com"
 }
 
 module "kops_cluster" {
   source = "./modules/kops-cluster"
 
-  ami                    = "${var.ami}"
-  kops_cluster_name      = "${terraform.workspace}.${local.kops_cluster_name}"
-  domain_name            = "${local.domain_name}"
-  kops_state_bucket_name = "${local.kops_state_bucket_name}"
-  region                 = "${var.region}"
-  master_size            = "${var.master_size}"
-  master_zone            = "${var.master_zone}"
-  master_count           = "${var.master_count}"
-  master_volume_size     = "${var.master_volume_size}"
-  node_size              = "${var.node_size}"
-  node_count             = "${var.node_count}"
-  zones                  = "${var.zones}"
-  network_cidr           = "${var.network_cidr}"
-  networking             = "${var.networking}"
-  keypair_name           = "${local.keypair_name}"
-  topology               = "${var.topology}"
-  api_loadbalancer_type  = "${var.api_loadbalancer_type}"
-  env                    = "${var.env}"
-  force_destroy          = "${var.force_destroy}"
   acl                    = "${var.acl}"
-  associate_public_ip    = "${var.associate_public_ip}"
-  encrypt_etcd_storage   = "${var.encrypt_etcd_storage}"
-  dry_run                = "${local.dry_run_kops}"
-  dns                    = "${var.dns}"
-  cloud                  = "${var.cloud}"
-  output                 = "${var.output}"
-  out                    = "${var.out}"
   admin_access           = "${var.admin_access}"
-  target                 = "${var.target}"
-  kubernetes_version     = "${var.kubernetes_version}"
-  node_volume_size       = "${var.node_volume_size}"
-  cloud_labels           = "${var.cloud_labels}"
+  ami                    = "${var.ami}"
+  api_loadbalancer_type  = "${var.api_loadbalancer_type}"
+  associate_public_ip    = "${var.associate_public_ip}"
   authorization          = "${var.authorization}"
+  availability_zone      = "${var.availability_zone}"
   bastion                = "${var.bastion}"
-  update_cluster         = "${local.update_cluster_kops}"
+  cloud                  = "${var.cloud}"
+  cloud_labels           = "${var.cloud_labels}"
   cluster_bucket         = "${local.cluster_bucket}"
   cluster_key            = "${local.cluster_key}"
   cluster_region         = "${local.cluster_region}"
-  enable_dns_support     = "${var.enable_dns_support}"
+  deploy_cluster         = "${var.deploy_cluster}"
+  dns                    = "${var.dns}"
+  domain_name            = "${local.domain_name}"
+  dry_run                = "${var.dry_run}"
   enable_dns_hostnames   = "${var.enable_dns_hostnames}"
+  enable_dns_support     = "${var.enable_dns_support}"
+  encrypt_etcd_storage   = "${var.encrypt_etcd_storage}"
+  env                    = "${var.env}"
+  force_destroy          = "${var.force_destroy}"
   instance_tenancy       = "${var.instance_tenancy}"
-  availability_zone      = "${var.availability_zone}"
+  keypair_name           = "${local.keypair_name}"
+  kops_cluster_name      = "${terraform.workspace}.${local.kops_cluster_name}"
+  kops_state_bucket_name = "${local.kops_state_bucket_name}"
+  kubernetes_version     = "${var.kubernetes_version}"
+  master_count           = "${var.master_count}"
+  master_size            = "${var.master_size}"
+  master_volume_size     = "${var.master_volume_size}"
+  master_zone            = "${var.master_zone}"
+  network_cidr           = "${var.network_cidr}"
+  networking             = "${var.networking}"
+  node_count             = "${var.node_count}"
+  node_size              = "${var.node_size}"
+  node_volume_size       = "${var.node_volume_size}"
+  out                    = "${var.out}"
+  output                 = "${var.output}"
+  region                 = "${var.region}"
   route_tables           = "${var.route_tables}"
-  vpc_cidr               = "${var.vpc_cidr}"
   subnets                = "${var.subnets}"
-  deploy_cluster         = "${local.deploy_cluster_kops}"
+  target                 = "${var.target}"
+  topology               = "${var.topology}"
+  update_cluster         = "${var.update_cluster}"
+  vpc_cidr               = "${var.vpc_cidr}"
+  zones                  = "${var.zones}"
 }
 
 module "kops_utilities" {
   source = "./modules/kops-utilities"
 
-  kops_cluster_name = "${terraform.workspace}.${local.kops_cluster_name}"
   install_utilities = "${local.install_utilities}"
+  kops_cluster_name = "${terraform.workspace}.${local.kops_cluster_name}"
   tiller_namespace  = "kube-system"
 
   depends_on = [

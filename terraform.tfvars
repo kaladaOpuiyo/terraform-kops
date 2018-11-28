@@ -9,9 +9,9 @@ master_size = "t2.medium"
 
 master_volume_size = "20"
 
-master_zone = "us-east-1a,us-east-1c,us-east-1f"
+master_zone = "us-east-1a,us-east-1c,us-east-1b,us-east-1f,us-east-1e"
 
-master_count = "3"
+master_count = "5"
 
 node_size = "t2.micro"
 

@@ -19,43 +19,55 @@ the destroy command to delete all cluster resources once done.
 **Create YAML for Cluster**
 
 ```bash
-sed -i "" '/  deploy_cluster_kops.*=/ s/= .*/= \"false\"/' ./main.tf && \
-sed -i "" '/dry_run_kops.*=/ s/= .*/= \"true\"/' ./main.tf && \
-sed -i "" '/update_cluster_kops.*=/ s/= .*/= \"false\"/' ./main.tf &&
-terraform apply -target=module.kops_cluster -auto-approve
+make create_yaml
 ```
 
 **Create Terraform For Cluster**
 
 ```bash
-sed -i "" '/  deploy_cluster_kops.*=/ s/= .*/= \"false\"/' ./main.tf && \
-sed -i "" '/dry_run_kops.*=/ s/= .*/= \"false\"/' ./main.tf && \
-sed -i "" '/update_cluster_kops.*=/ s/= .*/= \"false\"/' ./main.tf && \
-terraform apply -target=module.kops_cluster -auto-approve
+make create_terraform
 ```
 
 **Create Cluster**
 
 ```bash
-sed -i "" '/  deploy_cluster_kops.*=/ s/= .*/= \"true\"/' ./main.tf && \
-sed -i "" '/dry_run_kops.*=/ s/= .*/= \"false\"/' ./main.tf && \
-sed -i "" '/update_cluster_kops.*=/ s/= .*/= \"false\"/' ./main.tf && \
-terraform apply -target=module.kops_cluster -auto-approve
+make create_cluster
 ```
 
 **Create Utilities Services**
 
 ```bash
-terraform apply -target=module.kops_utilities -auto-approve
+make create_utilities
 ```
 
 **Updates Cluster**
 
 ```bash
-sed -i "" '/  deploy_cluster_kops.*=/ s/= .*/= \"true\"/' ./main.tf && \
-sed -i "" '/dry_run_kops.*=/ s/= .*/= \"false\"/' ./main.tf && \
-sed -i "" '/update_cluster_kops.*=/ s/= .*/= \"true\"/' ./main.tf && \
-terraform apply -target=module.kops_cluster -auto-approve
+make update_cluster
+```
+
+**Plan Cluster**
+
+```bash
+make plan_cluster
+```
+
+**Plan Utilities**
+
+```bash
+make plan_utilities
+```
+
+**Delete Cluster**
+
+```bash
+make destroy_cluster
+```
+
+**Delete Utilities**
+
+```bash
+make destroy_utilities
 ```
 
 **Login into cluster instance**
@@ -66,22 +78,11 @@ _Please Note:user will depending on image coreos used here_
 ssh core@{api or bastion}.{terraform.workspace}.{kops_cluster_name} -i {project.root}/keys/{keypair_name}.pem
 ```
 
-**Delete Cluster**
-
-```bash
-terraform destroy -target=module.kops_cluster
-```
-
-**Delete Utilities**
-
-```bash
-terraform destroy -target=module.kops_utilities
-```
-
 ## **TODO**
 
 - Complete Networkings Abstraction from Auto-Gen Terraform code.
 - Test Updating remaining parameters
+- ~~Added Makefile :)~~
 - ~~Introduce additional k8s utilities services (envoy,vault)~~ DONE
 - Further parameterize helm install utilities
 - Resolve any associated bugs with updating the cluster
