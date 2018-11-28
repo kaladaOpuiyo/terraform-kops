@@ -1,8 +1,7 @@
 #!/bin/bash
 
 
-
-CLUSTER_DEPLOYED=$(echo "false")
+CONFIG=${path_root}/config/${kops_cluster_name}.yaml
 
 kopsCreateYamlConfig(){
     echo '<======kopsCreateYamlConfig======>'
@@ -38,7 +37,7 @@ kopsCreateYamlConfig(){
        --cloud-labels="${cloud_labels}" \
        --cloud=${cloud} \
        --ssh-public-key=${ssh_public_key} \
-       --yes > ./config/${kops_cluster_name}.yaml
+       --yes > $CONFIG
 }
 
 kopsCreateTerraform(){
@@ -83,7 +82,7 @@ kopsCreateTerraform(){
 ########################################################################################################################
 
 
-if [ ${deploy_cluster} = false ] && [ $CLUSTER_DEPLOYED = false ];
+if [[ ${deploy_cluster} == false ]] && [[ ${cluster_deployed} == false ]];
     then
         echo '<======CleanUpOfClusterTempData======>'
 
@@ -107,8 +106,7 @@ grep "cluster not found \"${kops_cluster_name}\""  \
                     kopsCreateYamlConfig
                     kopsCreateTerraform
             fi
-        else
-                echo "update requested" $(date) >> ${path_root}/tmp/kops_update
+
     fi
 
 

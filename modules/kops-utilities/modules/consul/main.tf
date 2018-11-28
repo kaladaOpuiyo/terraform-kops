@@ -1,20 +1,3 @@
-# resource "null_resource" "consul_chart" {
-#   count = "${var.install_utilities}"
-
-#   provisioner "local-exec" {
-#     command = "curl ${var.consul_binary_url} | tar xz -C ${path.root}/tmp"
-#   }
-# }
-
-# resource "null_resource" "consul_install" {
-#   count = "${var.install_utilities}"
-
-#   provisioner "local-exec" {
-#     command = "helm install --name consul ${path.root}/tmp/consul-helm-0.3.0"
-#   }
-
-#   depends_on = ["null_resource.consul_chart"]
-# }
 resource "helm_release" "consul" {
   count     = "${var.install_utilities  ? 1: 0}"
   name      = "consul"

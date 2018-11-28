@@ -9,7 +9,7 @@ master_size = "t2.medium"
 
 master_volume_size = "20"
 
-master_zone = "us-east-1a,us-east-1b,us-east-1d"
+master_zone = "us-east-1a,us-east-1c,us-east-1f"
 
 master_count = "3"
 

@@ -199,6 +199,7 @@ data "template_file" "kops_init" {
     update_cluster         = "${var.update_cluster}"
     deploy_cluster         = "${var.deploy_cluster}"
     path_root              = "${path.root}"
+    cluster_deployed       = "${data.external.check_if_cluster_deployed.result["CLUSTER_DEPLOYED"]?"true":"false"}"
   }
 }
 
@@ -218,7 +219,6 @@ data "template_file" "kops_destroy" {
   vars {
     kops_state_store  = "s3://${replace(aws_s3_bucket.kops_state.arn,"arn:aws:s3:::","")}"
     kops_cluster_name = "${var.kops_cluster_name}"
-    dry_run           = "${var.dry_run}"
     path_root         = "${path.root}"
     out               = "${var.out}"
   }
@@ -231,8 +231,7 @@ resource "local_file" "kops_tf" {
   filename = "${path.root}/tmp/${sha1(data.template_file.kops_tf.rendered)}.sh"
 
   provisioner "local-exec" {
-    command    = "${self.filename}"
-    on_failure = "continue"
+    command = "${self.filename}"
   }
 
   depends_on = ["local_file.kops_update", "local_file.kops_init"]
@@ -252,7 +251,7 @@ data "template_file" "kops_tf" {
     kops_state_store  = "s3://${replace(aws_s3_bucket.kops_state.arn,"arn:aws:s3:::","")}"
     run_check         = "${path.root}/tmp/${sha1(data.template_file.kops_update.rendered)}.sh"
     update_cluster    = "${var.update_cluster}"
-    need_update       = "${data.external.check_if_cluster_needs_rolling_update.result["ROLLING_UPDATE"]}"
+    need_update       = "${data.external.check_if_cluster_needs_rolling_update.result["ROLLING_UPDATE"]?"true":"false"}"
   }
 }
 
@@ -332,10 +331,6 @@ data "external" "check_if_cluster_exist" {
 resource "local_file" "kops_cluster_status" {
   content  = "${data.template_file.kops_cluster_status.rendered}"
   filename = "${path.root}/tmp/${sha1(data.template_file.kops_cluster_status.rendered)}.sh"
-
-  provisioner "local-exec" {
-    command = "${self.filename}"
-  }
 }
 
 data "external" "check_if_cluster_needs_rolling_update" {
@@ -355,8 +350,23 @@ data "template_file" "kops_cluster_rolling_update" {
 resource "local_file" "kops_cluster_rolling_update" {
   content  = "${data.template_file.kops_cluster_rolling_update.rendered}"
   filename = "${path.root}/tmp/${sha1(data.template_file.kops_cluster_rolling_update.rendered)}.sh"
+}
 
-  provisioner "local-exec" {
-    command = "${self.filename}"
+data "external" "check_if_cluster_deployed" {
+  program    = ["${path.root}/tmp/${sha1(data.template_file.check_if_cluster_deployed.rendered)}.sh"]
+  depends_on = ["local_file.check_if_cluster_deployed"]
+}
+
+data "template_file" "check_if_cluster_deployed" {
+  template = "${file("${path.module}/bin/kops_cluster_deployed.tpl")}"
+
+  vars {
+    kops_cluster_name = "${var.kops_cluster_name}"
+    kops_state_store  = "s3://${replace(aws_s3_bucket.kops_state.arn,"arn:aws:s3:::","")}"
   }
+}
+
+resource "local_file" "check_if_cluster_deployed" {
+  content  = "${data.template_file.check_if_cluster_deployed.rendered}"
+  filename = "${path.root}/tmp/${sha1(data.template_file.check_if_cluster_deployed.rendered)}.sh"
 }

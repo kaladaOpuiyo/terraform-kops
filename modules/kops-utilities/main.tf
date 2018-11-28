@@ -26,12 +26,14 @@ module "consul" {
   install_utilities = "${var.install_utilities}"
 }
 
-# module "kube2iam" {
-#   source = "./modules/kube2iam"
+module "vault" {
+  source = "./modules/vault"
 
-#   tiller_namespace  = "${var.tiller_namespace}"
-#   install_utilities = "${var.install_utilities}"
-# }
+  tiller_namespace  = "${var.tiller_namespace}"
+  install_utilities = "${var.install_utilities}"
+
+  depends_on = ["${module.consul.service_name}"]
+}
 
 module "rook" {
   source = "./modules/rook"

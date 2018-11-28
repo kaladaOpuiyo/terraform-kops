@@ -32,16 +32,12 @@ locals {
   cluster_region         = "us-east-1"
   cluster_key            = "env:/${terraform.workspace}/kops-cluster"
   cluster_bucket         = "tf-state-test-kalada-opuiyo"
+  install_utilities      = true
 
   #DEPLOY DO NOT ALTER MANUALLY!!!
-  dry_run = "false"
-
-  deploy_cluster = "true"
-
-  install_utilities = true
-
-  ## VERY BUGGY, LEAVE FALSE FOR NOW!!! ###
-  update_cluster = "false"
+  dry_run_kops        = "false"
+  deploy_cluster_kops = "true"
+  update_cluster_kops = "false"
 }
 
 module "kops_cluster" {
@@ -69,7 +65,7 @@ module "kops_cluster" {
   acl                    = "${var.acl}"
   associate_public_ip    = "${var.associate_public_ip}"
   encrypt_etcd_storage   = "${var.encrypt_etcd_storage}"
-  dry_run                = "${local.dry_run}"
+  dry_run                = "${local.dry_run_kops}"
   dns                    = "${var.dns}"
   cloud                  = "${var.cloud}"
   output                 = "${var.output}"
@@ -81,7 +77,7 @@ module "kops_cluster" {
   cloud_labels           = "${var.cloud_labels}"
   authorization          = "${var.authorization}"
   bastion                = "${var.bastion}"
-  update_cluster         = "${local.update_cluster}"
+  update_cluster         = "${local.update_cluster_kops}"
   cluster_bucket         = "${local.cluster_bucket}"
   cluster_key            = "${local.cluster_key}"
   cluster_region         = "${local.cluster_region}"
@@ -92,7 +88,7 @@ module "kops_cluster" {
   route_tables           = "${var.route_tables}"
   vpc_cidr               = "${var.vpc_cidr}"
   subnets                = "${var.subnets}"
-  deploy_cluster         = "${local.deploy_cluster}"
+  deploy_cluster         = "${local.deploy_cluster_kops}"
 }
 
 module "kops_utilities" {

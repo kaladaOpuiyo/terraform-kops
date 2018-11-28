@@ -1,16 +1,20 @@
 #!/bin/bash
 
-BACKEND_SET=$(cat ${path_root}/${out}/kubernetes.tf | grep \"${cluster_bucket}\" > /dev/null && echo true || echo false )
-HELM_PROVIDER_EXIST=$(cat ${path_root}/${out}/kubernetes.tf | grep helm > /dev/null && echo true || echo false )
+TF_FILES=${path_root}/${out}/kubernetes.tf
+TF_PLAN=${path_root}/tmp/kopsPlan.tfplan
+BACKEND_SET=$(cat  ${path_root}/${out}/kubernetes.tf | grep \"${cluster_bucket}\" > /dev/null && echo true || echo false )
+HELM_PROVIDER_EXIST=$(cat  ${path_root}/${out}/kubernetes.tf | grep helm > /dev/null && echo true || echo false )
 RUN_CHECK=${run_check}
 KUBE_CONFIG="~/.kube/config"
 
+
 addHelmProvider(){
+
   echo '<======addHelmProvider======>'
 
 if  [ $HELM_PROVIDER_EXIST = false ];
 then
-cat >> ${path_root}/${out}/kubernetes.tf <<EOF
+cat >>  $TF_FILES <<EOF
 provider "helm" {
   install_tiller  = false
   namespace       = "kube-system"
@@ -38,7 +42,7 @@ resource "null_resource" "tiller_rbac" {
   depends_on = ["null_resource.cluster_init"]
 }
 
-resource "null_resource" "helm_init" {
+resource "null_resource" "tiller_deploy" {
   provisioner "local-exec" {
     command = "helm init --service-account tiller --wait"
   }
@@ -63,9 +67,9 @@ if  [ $BACKEND_SET = false ];
                   echo "    key     =  \"${cluster_key}/kops_autogen.tfstate\""
                   echo "    region  =  \"${cluster_region}\""
                   echo "  }"
-              ) ${path_root}/${out}/kubernetes.tf > ${path_root}/tmp/kubernetes.tf.tmp
+              )  $TF_FILES > ${path_root}/tmp/kubernetes.tf.tmp
 
-              mv -f ${path_root}/tmp/kubernetes.tf.tmp ${path_root}/${out}/kubernetes.tf
+              mv -f ${path_root}/tmp/kubernetes.tf.tmp  $TF_FILES
     else
            echo "backend already set"
 fi
@@ -78,11 +82,11 @@ applyKopsTerraform(){
 
     cd ${path_root}/${out} && \
     terraform init -input=false && \
-    terraform plan -out=${path_root}/tmp/kopsPlan.tfplan -input=false
+    terraform plan -out=$TF_PLAN -input=false
 
-    if [ ${deploy_cluster} = true ];
+    if [[ ${deploy_cluster} == true ]];
        then
-          terraform apply -input=false ${path_root}/tmp/kopsPlan.tfplan
+          terraform apply -input=false $TF_PLAN
     fi
 }
 
@@ -91,13 +95,11 @@ applyKopsTerraform(){
 rollingUpdate(){
 sleep 30
  echo '<======rollingUpdate======>'
-     if [ ${update_cluster} = true ] || [ ${need_update} = true ];
+     if [[ ${update_cluster} = true ]] || [[ ${need_update} == true ]];
          then
             while [ 1 ]; do kops rolling-update cluster \
             --fail-on-validate-error="false" \
-            --master-interval=8m \
-            --node-interval=8m \
-              --name=${kops_cluster_name} --state=${kops_state_store} --yes --cloudonly --force\
+            --name=${kops_cluster_name} --state=${kops_state_store} --yes \
             && break || sleep 5; done;
 
      fi

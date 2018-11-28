@@ -1,30 +1,27 @@
 #!/bin/bash
 
+TF_FILES=${path_root}/${out}
+KOPS_CONFIG=${path_root}/config
+KOPS_KEYS=${path_root}/keys
+TMP_FILES=${path_root}/tmp
+
 kopsDestroy(){
     echo '<======kopsDestroy======>'
 
-        if [ ${dry_run} = true ];
-
-            then
-                echo "dry run nothing to destroy";exit 0
-            else
-
-                cd ${path_root}/${out} && terraform destroy -auto-approve
+                cd $TF_FILES && terraform destroy -auto-approve
                 kops delete cluster --state=${kops_state_store} --yes --name=${kops_cluster_name}
-
-        fi
 }
 fileCleanUp(){
 echo '<======fileCleanUp======>'
-    rm -rf ${path_root}/${out}
-    rm -rf ${path_root}/config
-    rm -rf ${path_root}/keys
-    rm -rf ${path_root}/tmp
+    rm -rf $TF_FILES
+    rm -rf $KOPS_CONFIG
+    rm -rf $KOPS_KEYS
+    rm -rf $TMP_FILES
 
 }
 ########################################################################################################################
   # Main
 ########################################################################################################################
 
-kopsDestroy
-fileCleanUp
+        kopsDestroy
+        fileCleanUp

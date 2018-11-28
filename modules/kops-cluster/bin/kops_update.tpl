@@ -1,10 +1,6 @@
 #!/bin/bash
 RUN_CHECK=${run_check}
-
-
-# - Generate Yaml from Template ->  kops toolbox template (This is the most challanging thing about all this) [generateTemplate]
-# - Replace Config Yaml ->  kops replace -f [replaceCluster]
-# - Update Terraform -> kops update cluster --target=terraform [updateClusterTerraform]
+EDIT_CONFIG=${path_root}/config/edited.${kops_cluster_name}.yaml
 
 
 generateTemplate(){
@@ -41,14 +37,14 @@ generateTemplate(){
        --cloud-labels="${cloud_labels}" \
        --cloud=${cloud} \
        --ssh-public-key=${ssh_public_key} \
-       --yes >  ${path_root}/config/edited.${kops_cluster_name}.yaml
-  sed -i '' 's/'edited.${kops_cluster_name}'/'${kops_cluster_name}'/g'  ${path_root}/config/edited.${kops_cluster_name}.yaml
+       --yes > $EDIT_CONFIG
+  sed -i '' 's/'edited.${kops_cluster_name}'/'${kops_cluster_name}'/g' $EDIT_CONFIG
 }
 
 
 replaceCluster(){
   echo '<======replaceCluster======>'
- kops replace -f  ${path_root}/config/edited.${kops_cluster_name}.yaml  --name=${kops_cluster_name} --state=${kops_state_store} --force
+ kops replace -f $EDIT_CONFIG  --name=${kops_cluster_name} --state=${kops_state_store} --force
 }
 
 
@@ -63,7 +59,6 @@ updateClusterTerraform(){
 ########################################################################################################################
 
 echo "UPDATE CLUSTER"
-touch ${path_root}/tmp/kops_update  &&  echo "UPDATE CLUSTER:${update_cluster}" > ${path_root}/tmp/kops_update
 generateTemplate
 replaceCluster
 updateClusterTerraform
