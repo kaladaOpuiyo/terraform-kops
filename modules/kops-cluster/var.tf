@@ -68,6 +68,8 @@ variable "api_loadbalancer_type" {
 }
 
 variable "kops_attach_policy" {
+  description = "kops_attach_policy"
+
   default = [
     "AmazonEC2FullAccess",
     "AmazonRoute53FullAccess",

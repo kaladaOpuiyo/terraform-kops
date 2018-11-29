@@ -5,21 +5,21 @@ out = ".kops-tf"
 #CoreOs AMI
 ami = "ami-03ed1c12a1dd84320"
 
-master_size = "t2.medium"
+master_size = "t2.medium" #UPDATEABLE
 
-master_volume_size = "20"
+master_volume_size = "20" #UPDATEABLE
 
-master_zone = "us-east-1a,us-east-1c,us-east-1b,us-east-1f,us-east-1e"
+master_zone = "us-east-1a,us-east-1c,us-east-1b" #BUGGY
 
-master_count = "5"
+master_count = "3" #BUGGY
 
-node_size = "t2.micro"
+node_size = "t2.medium" #UPDATEABLE
 
-node_volume_size = "20"
+node_volume_size = "20" #UPDATEABLE
 
-node_count = "3"
+node_count = "3" #UPDATEABLE
 
-zones = "us-east-1a,us-east-1c,us-east-1f"
+zones = "us-east-1a,us-east-1c,us-east-1b"
 
 networking = "calico"
 
