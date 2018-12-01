@@ -1,5 +1,4 @@
 resource "helm_release" "consul" {
-  count     = "${var.install_utilities  ? 1: 0}"
   name      = "consul"
   chart     = "stable/consul"
   namespace = "${var.tiller_namespace}"
@@ -10,8 +9,6 @@ resource "helm_release" "consul" {
 }
 
 resource "kubernetes_cluster_role_binding" "consul" {
-  count = "${var.install_utilities  ? 1: 0}"
-
   metadata {
     name = "consul"
   }

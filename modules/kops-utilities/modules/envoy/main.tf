@@ -1,6 +1,4 @@
 resource "helm_release" "envoy" {
-  count = "${var.install_utilities  ? 1: 0}"
-
   name      = "envoy"
   chart     = "stable/envoy"
   namespace = "${var.tiller_namespace}"
@@ -11,7 +9,7 @@ resource "helm_release" "envoy" {
 }
 
 # resource "kubernetes_cluster_role_binding" "envoy" {
-#   count = "${var.install_utilities  ? 1: 0}"
+#
 
 
 #   metadata {

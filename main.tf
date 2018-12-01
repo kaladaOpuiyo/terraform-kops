@@ -28,7 +28,6 @@ locals {
 
   #Used to retrive the dommain certificate info
   domain_name            = "www.kaladaopuiyo.com"
-  install_utilities      = true
   keypair_name           = "cluster_kalada_opuiyo.com"
   kops_cluster_name      = "kaladaopuiyo.com"
   kops_state_bucket_name = "k8s.kaladaopuiyo.com"
@@ -88,7 +87,6 @@ module "kops_cluster" {
 module "kops_utilities" {
   source = "./modules/kops-utilities"
 
-  install_utilities = "${local.install_utilities}"
   kops_cluster_name = "${terraform.workspace}.${local.kops_cluster_name}"
   tiller_namespace  = "kube-system"
 

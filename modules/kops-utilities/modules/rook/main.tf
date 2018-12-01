@@ -1,12 +1,9 @@
 resource "helm_repository" "rook_beta" {
-  count = "${var.install_utilities  ? 1: 0}"
-  name  = "rock-beta"
-  url   = "https://charts.rook.io/beta"
+  name = "rock-beta"
+  url  = "https://charts.rook.io/beta"
 }
 
 resource "helm_release" "rook_beta" {
-  count = "${var.install_utilities  ? 1: 0}"
-
   name       = "rook-system"
   chart      = "rook-beta/rook-ceph"
   repository = "${helm_repository.rook_beta.metadata.0.name}"
@@ -19,8 +16,6 @@ resource "helm_release" "rook_beta" {
 }
 
 resource "kubernetes_cluster_role_binding" "rook_stable" {
-  count = "${var.install_utilities  ? 1: 0}"
-
   metadata {
     name = "rook"
   }

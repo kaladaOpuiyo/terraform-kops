@@ -5,7 +5,6 @@ the destroy command to delete all cluster resources once done.
 
 ## **Prerequisites**
 
-- AWS ACCOUNT !!
 - **Domain Name:** This is k8s so you'll need your own domain name
 - **Dommain Certificate**: Create a Domain Cert for the Domain Name you'll use for the cluster. Do this ahead of time as it takes sometime to authenticate. [Request a Public Certificate](https://docs.aws.amazon.com/acm/latest/userguide/gs-acm-request-public.html)
 - **Terraform S3 Bucket**:Create an s3 bucket to house your terraform state files. [Remote state backend](https://www.terraform.io/docs/backends/types/s3.html)
@@ -80,13 +79,14 @@ ssh core@{api or bastion}.{terraform.workspace}.{kops_cluster_name} -i {project.
 
 ## **TODO**
 
-- Complete Networkings Abstraction from Auto-Gen Terraform code.
+- Complete Networking Abstraction from Auto-Gen Terraform code.
 - Test Updating remaining parameters
 - ~~Added Makefile :)~~
 - ~~Introduce additional k8s utilities services (envoy,vault)~~ DONE
 - Further parameterize helm install utilities
 - Resolve any associated bugs with updating the cluster
-- R/v pipelines for uncessessary coding
+- ~~R/v pipelines for uncessessary coding for kops-cluster~~ DONE
+- R/v pipelines for uncessessary coding for kops
 - Documment k8s utilities
 - Persistant volume integration
 - ~~Move Consul to Helm Provider~~ DONE

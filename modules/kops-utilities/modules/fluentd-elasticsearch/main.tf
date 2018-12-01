@@ -1,5 +1,4 @@
 resource "helm_release" "fluentd_elasticsearch" {
-  count     = "${var.install_utilities  ? 1: 0}"
   name      = "fluentd-elasticsearch"
   chart     = "stable/fluentd-elasticsearch"
   namespace = "${var.tiller_namespace}"
@@ -10,8 +9,6 @@ resource "helm_release" "fluentd_elasticsearch" {
 }
 
 resource "kubernetes_cluster_role_binding" "fluentd_elasticsearch" {
-  count = "${var.install_utilities  ? 1: 0}"
-
   metadata {
     name = "fluentd-elasticsearch"
   }

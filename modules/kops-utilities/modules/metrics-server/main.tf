@@ -1,6 +1,4 @@
 resource "helm_release" "metrics_server" {
-  count = "${var.install_utilities  ? 1: 0}"
-
   name      = "metrics-server"
   chart     = "stable/metrics-server"
   namespace = "${var.tiller_namespace}"
@@ -11,8 +9,6 @@ resource "helm_release" "metrics_server" {
 }
 
 resource "kubernetes_cluster_role_binding" "metrics_server" {
-  count = "${var.install_utilities  ? 1: 0}"
-
   metadata {
     name = "metrics-server"
   }

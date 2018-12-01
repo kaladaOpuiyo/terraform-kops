@@ -1,13 +1,9 @@
 resource "helm_repository" "vault" {
-  count = "${var.install_utilities  ? 1: 0}"
-
   name = "incubator"
   url  = "http://storage.googleapis.com/kubernetes-charts-incubator"
 }
 
 resource "helm_release" "vault" {
-  count = "${var.install_utilities  ? 1: 0}"
-
   name       = "vault"
   chart      = "incubator/vault"
   repository = "${helm_repository.vault.metadata.0.name}"
