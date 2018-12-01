@@ -12,6 +12,9 @@ variable "cluster_bucket" {}
 variable "cluster_key" {}
 variable "cluster_region" {}
 variable "deploy_cluster" {}
+
+variable "destroy_cluster" {}
+
 variable "dns" {}
 variable "domain_cert_arn" {}
 variable "domain_name" {}

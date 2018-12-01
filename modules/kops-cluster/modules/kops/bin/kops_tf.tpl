@@ -98,7 +98,7 @@ applyKopsTerraform(){
 rollingUpdate(){
 sleep 30
  echo '<======rollingUpdate======>'
-     if [[ ${update_cluster} = true ]] || [[ ${need_update} == true ]];
+     if [[ ${update_cluster} == true ]] || [[ ${need_update} == true ]];
          then
             while [ 1 ]; do kops rolling-update cluster \
             --fail-on-validate-error="false" \

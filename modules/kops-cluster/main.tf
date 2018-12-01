@@ -28,6 +28,7 @@ module "kops" {
   cluster_bucket         = "${var.cluster_bucket}"
   cluster_key            = "${var.cluster_key}"
   cluster_region         = "${var.cluster_region}"
+  destroy_cluster        = "${var.destroy_cluster}"
   deploy_cluster         = "${var.deploy_cluster}"
   dns                    = "${var.dns}"
   domain_cert_arn        = "${module.certs.domain_cert_arn}"

@@ -57,13 +57,16 @@ data "template_file" "kops_init" {
 }
 
 resource "local_file" "kops_destroy" {
+  count    = "${var.destroy_cluster ? 1:0}"
   content  = "${data.template_file.kops_destroy.rendered}"
   filename = "${path.root}/tmp/${sha1(data.template_file.kops_destroy.rendered)}.sh"
 
   provisioner "local-exec" {
-    command = "${self.filename}"
+    command = "${path.root}/tmp/${sha1(data.template_file.kops_destroy.rendered)}.sh"
     when    = "destroy"
   }
+
+  depends_on = ["local_file.kops_destroy"]
 }
 
 data "template_file" "kops_destroy" {

@@ -50,6 +50,7 @@ module "kops_cluster" {
   cluster_key            = "${local.cluster_key}"
   cluster_region         = "${local.cluster_region}"
   deploy_cluster         = "${var.deploy_cluster}"
+  destroy_cluster        = "${var.destroy_cluster}"
   dns                    = "${var.dns}"
   domain_name            = "${local.domain_name}"
   dry_run                = "${var.dry_run}"

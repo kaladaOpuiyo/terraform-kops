@@ -13,13 +13,15 @@ create_cluster: ## Creates cluster, sets -var 'dry_run=false' , -var 'deploy_clu
 	terraform apply -target=module.kops_cluster -auto-approve \
 	 -var 'dry_run=false' \
   	 -var 'deploy_cluster=true' \
-	 -var 'update_cluster=false'
+	 -var 'update_cluster=false' \
+	 -var 'destroy_cluster=false'
 
 create_terraform: ## Creates terraform auto-genrated code for cluster , sets -var 'dry_run=false' , -var 'deploy_cluster=false' ,  -var 'update_cluster=false'
 	terraform apply -target=module.kops_cluster -auto-approve \
 	 -var 'dry_run=false' \
   	 -var 'deploy_cluster=false' \
-	 -var 'update_cluster=false'
+	 -var 'update_cluster=false' \
+	 -var 'destroy_cluster=false'
 
 create_utilities: ## Installs helm cluster utilities charts, sets -var 'dry_run=true' , -var 'deploy_cluster=true' ,-var 'update_cluster=false'
 	terraform apply -target=module.kops_utilities -auto-approve
@@ -28,10 +30,12 @@ create_yaml: ## Creates terraform auto-genrated code for cluster , sets -var 'dr
 	terraform apply -target=module.kops_cluster -auto-approve \
 	 -var 'dry_run=true' \
   	 -var 'deploy_cluster=false' \
-	 -var 'update_cluster=false'
+	 -var 'update_cluster=false' \
+	 -var 'destroy_cluster=false'
 
 destroy_cluster: ## Destroys cluster
-	terraform destroy -target=module.kops_cluster
+	terraform destroy -target=module.kops_cluster \
+     -var 'destroy_cluster=true'
 
 destroy_utilities: ## Uninstalls helm cluster utilities charts
 	terraform destroy -target=module.kops_utilities
@@ -46,7 +50,8 @@ update_cluster: ## Run a rolling update against the cluster
 	terraform apply -target=module.kops_cluster -auto-approve \
 	 -var 'dry_run=false' \
   	 -var 'deploy_cluster=true' \
-	 -var 'update_cluster=true'
+ 	 -var 'update_cluster=true' \
+	 -var 'destroy_cluster=false'
 
 
 
