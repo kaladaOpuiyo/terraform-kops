@@ -1,4 +1,8 @@
 #!/bin/bash
+
+# Exit if any of the intermediate steps fail
+set -e
+
 RUN_CHECK=${run_check}
 EDIT_CONFIG=${path_root}/config/edited.${kops_cluster_name}.yaml
 

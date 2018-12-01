@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# Exit if any of the intermediate steps fail
+set -e
+
 TF_FILES=${path_root}/${out}/kubernetes.tf
 TF_PLAN=${path_root}/tmp/kopsPlan.tfplan
 BACKEND_SET=$(cat  ${path_root}/${out}/kubernetes.tf | grep \"${cluster_bucket}\" > /dev/null && echo true || echo false )

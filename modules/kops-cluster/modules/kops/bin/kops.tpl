@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# Exit if any of the intermediate steps fail
+set -e
 
 CONFIG=${path_root}/config/${kops_cluster_name}.yaml
 
