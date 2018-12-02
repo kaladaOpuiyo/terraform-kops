@@ -86,7 +86,7 @@ module "kops_cluster" {
 }
 
 module "kops_iam" {
-  source = "./modules/kops_iam"
+  source = "./modules/kops-iam"
 }
 
 module "kops_utilities" {

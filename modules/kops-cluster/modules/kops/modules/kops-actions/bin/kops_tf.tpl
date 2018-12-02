@@ -32,7 +32,7 @@ kubernetes {
 
 resource "null_resource" "cluster_init" {
   provisioner "local-exec" {
-    command = "while [ 1 ]; do  kops validate cluster --name=${kops_cluster_name} --state=${kops_state_store} && break || sleep 30; done;"
+    command = "while [ 1 ]; do  kops validate cluster --name=${kops_cluster_name} --state=${kops_state_store} && break || sleep 15; done;"
   }
 }
 
