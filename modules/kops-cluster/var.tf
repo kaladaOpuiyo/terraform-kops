@@ -35,16 +35,6 @@ variable "force_destroy" {}
 variable "instance_tenancy" {}
 variable "keypair_name" {}
 
-variable "kops_attach_policy" {
-  default = [
-    "AmazonEC2FullAccess",
-    "AmazonRoute53FullAccess",
-    "AmazonS3FullAccess",
-    "IAMFullAccess",
-    "AmazonVPCFullAccess",
-  ]
-}
-
 variable "kops_cluster_name" {}
 variable "kops_state_bucket_name" {}
 variable "kubernetes_version" {}

@@ -1,16 +1,12 @@
 #!/bin/bash
 
-# Exit if any of the intermediate steps fail
-set -e
-
-RUN_CHECK=${run_check}
-EDIT_CONFIG=${path_root}/config/edited.${kops_cluster_name}.yaml
+EDIT_CONFIG=${path_root}/config/${workspace}/edited.${kops_cluster_name}.yaml
 
 
 generateTemplate(){
     echo '<======kopsCreateYamlConfig======>'
 
-    mkdir -p ./config && \
+    mkdir -p ${path_root}/config/${workspace} && \
     kops create cluster \
        --name=edited.${kops_cluster_name} \
        --state=${kops_state_store} \
@@ -54,7 +50,7 @@ replaceCluster(){
 
 updateClusterTerraform(){
   echo '<======updateClusterTerraform======>'
-  kops update cluster --name=${kops_cluster_name} --state=${kops_state_store} --target=terraform  --out=${path_root}/${out}
+  kops update cluster --name=${kops_cluster_name} --state=${kops_state_store} --target=terraform  --out=${path_root}/${out}/${workspace}
 }
 
 

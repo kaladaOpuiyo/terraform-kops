@@ -1,11 +1,10 @@
 #!/bin/bash
 
 # Exit if any of the intermediate steps fail
-set -e
 
-TF_FILES=${path_root}/${out}
-KOPS_CONFIG=${path_root}/config
-KOPS_KEYS=${path_root}/keys
+TF_FILES=${path_root}/${out}/${workspace}
+KOPS_CONFIG=${path_root}/config/${workspace}
+KOPS_KEYS=${path_root}/keys/${workspace}
 TMP_FILES=${path_root}/tmp
 
 kopsDestroy(){

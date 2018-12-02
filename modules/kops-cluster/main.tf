@@ -6,12 +6,6 @@ module "certs" {
   keypair_name   = "${var.keypair_name}"
 }
 
-module "iam" {
-  source = "./modules/iam"
-
-  kops_attach_policy = "${var.kops_attach_policy}"
-}
-
 module "kops" {
   source = "./modules/kops"
 

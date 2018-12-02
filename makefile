@@ -9,6 +9,9 @@ help:
 init: ## Init terraform
 	terraform init
 
+create_user: ## Creates kops iam user should be executed after init
+	terraform apply -target=module.kops_iam -auto-approve
+
 create_cluster: ## Creates cluster, sets -var 'dry_run=false' , -var 'deploy_cluster=true' ,  -var 'update_cluster=false'
 	terraform apply -target=module.kops_cluster -auto-approve \
 	 -var 'dry_run=false' \
@@ -37,13 +40,19 @@ destroy_cluster: ## Destroys cluster
 	terraform destroy -target=module.kops_cluster \
      -var 'destroy_cluster=true'
 
+destroy_user: ## Removes kops user and associated resources from iam
+	terraform destroy -target=module.kops_iam
+
 destroy_utilities: ## Uninstalls helm cluster utilities charts
 	terraform destroy -target=module.kops_utilities
 
 plan_cluster: ## Run a plan against current cluster settings does not plan auto genetrated kops code. May be future addition
 	terraform plan -target=module.kops_cluster
 
-plan_utilities: ## Run a plan on the kops- utilities module
+plan_utilities: ## Run a plan on the kops_utilities module
+	terraform plan -target=module.kops_utilities
+
+plan_user: ## Run a plan on the kops_iam module
 	terraform plan -target=module.kops_utilities
 
 update_cluster: ## Run a rolling update against the cluster

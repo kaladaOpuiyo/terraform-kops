@@ -9,9 +9,11 @@ variable "bastion" {}
 variable "cloud_labels" {}
 variable "cloud" {}
 
-variable "destroy_cluster" {}
-
 variable "deploy_cluster" {
+  default = "false"
+}
+
+variable "destroy_cluster" {
   default = "false"
 }
 

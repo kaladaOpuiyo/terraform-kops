@@ -52,21 +52,27 @@ data "template_file" "kops_init" {
     topology               = "${var.topology}"
     update_cluster         = "${var.update_cluster}"
     vpc                    = "${var.vpc_id}"
+    workspace              = "${terraform.workspace}"
     zones                  = "${var.zones}"
   }
 }
 
-resource "local_file" "kops_destroy" {
-  count    = "${var.destroy_cluster ? 1:0}"
-  content  = "${data.template_file.kops_destroy.rendered}"
-  filename = "${path.root}/tmp/${sha1(data.template_file.kops_destroy.rendered)}.sh"
+resource "null_resource" "kops_destroy" {
+  triggers {
+    destroy_cluster = "${var.destroy_cluster}"
+  }
 
   provisioner "local-exec" {
-    command = "${path.root}/tmp/${sha1(data.template_file.kops_destroy.rendered)}.sh"
+    command = "${path.root}/tmp/${terraform.workspace}_${var.kops_cluster_name}_destroy.sh"
     when    = "destroy"
   }
 
   depends_on = ["local_file.kops_destroy"]
+}
+
+resource "local_file" "kops_destroy" {
+  content  = "${data.template_file.kops_destroy.rendered}"
+  filename = "${path.root}/tmp/${terraform.workspace}_${var.kops_cluster_name}_destroy.sh"
 }
 
 data "template_file" "kops_destroy" {
@@ -77,6 +83,7 @@ data "template_file" "kops_destroy" {
     kops_cluster_name = "${var.kops_cluster_name}"
     path_root         = "${path.root}"
     out               = "${var.out}"
+    workspace         = "${terraform.workspace}"
   }
 }
 
@@ -108,6 +115,7 @@ data "template_file" "kops_tf" {
     path_root         = "${path.root}"
     run_check         = "${path.root}/tmp/${sha1(data.template_file.kops_update.rendered)}.sh"
     update_cluster    = "${var.update_cluster}"
+    workspace         = "${terraform.workspace}"
   }
 }
 
@@ -163,6 +171,7 @@ data "template_file" "kops_update" {
     topology               = "${var.topology}"
     update_cluster         = "${var.update_cluster}"
     vpc                    = "${var.vpc_id}"
+    workspace              = "${terraform.workspace}"
     zones                  = "${var.zones}"
   }
 }

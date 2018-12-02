@@ -1,13 +1,11 @@
 #!/bin/bash
 
 # Exit if any of the intermediate steps fail
-set -e
 
-TF_FILES=${path_root}/${out}/kubernetes.tf
-TF_PLAN=${path_root}/tmp/kopsPlan.tfplan
-BACKEND_SET=$(cat  ${path_root}/${out}/kubernetes.tf | grep \"${cluster_bucket}\" > /dev/null && echo true || echo false )
-HELM_PROVIDER_EXIST=$(cat  ${path_root}/${out}/kubernetes.tf | grep helm > /dev/null && echo true || echo false )
-RUN_CHECK=${run_check}
+TF_FILES=${path_root}/${out}/${workspace}/kubernetes.tf
+TF_PLAN=${path_root}/tmp/${workspace}_cluster.tfplan
+BACKEND_SET=$(cat  ${path_root}/${out}/${workspace}/kubernetes.tf | grep \"${cluster_bucket}\" > /dev/null && echo true || echo false )
+HELM_PROVIDER_EXIST=$(cat  ${path_root}/${out}/${workspace}/kubernetes.tf | grep helm > /dev/null && echo true || echo false )
 KUBE_CONFIG="~/.kube/config"
 
 
@@ -83,7 +81,7 @@ fi
 applyKopsTerraform(){
   echo '<======applyKopsTerraform======>'
 
-    cd ${path_root}/${out} && \
+    cd ${path_root}/${out}/${workspace} && \
     terraform init -input=false && \
     terraform plan -out=$TF_PLAN -input=false
 
@@ -95,7 +93,7 @@ applyKopsTerraform(){
 
 
 
-rollingUpdate(){
+rollingUpdateCheck(){
 sleep 30
  echo '<======rollingUpdate======>'
      if [[ ${update_cluster} == true ]] || [[ ${need_update} == true ]];
@@ -114,4 +112,4 @@ sleep 30
 addRemoteState
 addHelmProvider
 applyKopsTerraform
-rollingUpdate
+rollingUpdateCheck

@@ -15,6 +15,18 @@ the destroy command to delete all cluster resources once done.
 
 ## **Usage**
 
+**Intialize Terraform**
+
+```bash
+make init
+```
+
+**Create Iam Kops resources**
+
+```bash
+make create_user
+```
+
 **Create YAML for Cluster**
 
 ```bash
@@ -51,6 +63,12 @@ make update_cluster
 make plan_cluster
 ```
 
+**Plan Kops IAM**
+
+```bash
+make plan_user
+```
+
 **Plan Utilities**
 
 ```bash
@@ -61,6 +79,12 @@ make plan_utilities
 
 ```bash
 make destroy_cluster
+```
+
+**Delete Kops IAM**
+
+```bash
+make destroy_user
 ```
 
 **Delete Utilities**
@@ -79,7 +103,8 @@ ssh core@{api or bastion}.{terraform.workspace}.{kops_cluster_name} -i {project.
 
 ## **TODO**
 
-- ~~BUG: If prevent cluster destroy from running when a command other than destroy is requested~~ DONE
+- ~~BUG: If prevent cluster destroy from running when a command other than destroy is requested~~ Seems to be fixed will continue to observer behavior
+
 - Complete Networking Abstraction from Auto-Gen Terraform code.
 - Test Updating remaining parameters
 - ~~Added Makefile :)~~

@@ -1,14 +1,12 @@
 #!/bin/bash
 
-# Exit if any of the intermediate steps fail
-set -e
 
-CONFIG=${path_root}/config/${kops_cluster_name}.yaml
+CONFIG=${path_root}/config/${workspace}/${kops_cluster_name}.yaml
 
 kopsCreateYamlConfig(){
     echo '<======kopsCreateYamlConfig======>'
 
-    mkdir -p ./config && \
+    mkdir -p ${path_root}/config/${workspace} && \
     kops create cluster \
        --name=${kops_cluster_name} \
        --state=${kops_state_store} \
@@ -73,7 +71,7 @@ kopsCreateTerraform(){
        --cloud-labels="${cloud_labels}" \
        --cloud=${cloud} \
        --ssh-public-key=${ssh_public_key} \
-       --out=${path_root}/${out} \
+       --out=${path_root}/${out}/${workspace} \
        --yes
 
 }
@@ -88,7 +86,7 @@ if [[ ${deploy_cluster} == false ]] && [[ ${cluster_deployed} == false ]];
     then
         echo '<======CleanUpOfClusterTempData======>'
 
-          cd ${path_root}/${out} && terraform destroy -auto-approve && \
+          cd ${path_root}/${out}/${workspace} && terraform destroy -auto-approve && \
           kops delete cluster --state=${kops_state_store} --yes --name=${kops_cluster_name}
 fi
 

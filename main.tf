@@ -28,8 +28,8 @@ locals {
 
   #Used to retrive the dommain certificate info
   domain_name            = "www.kaladaopuiyo.com"
-  keypair_name           = "cluster_kalada_opuiyo.com"
-  kops_cluster_name      = "kaladaopuiyo.com"
+  keypair_name           = "${terraform.workspace}_cluster_kalada_opuiyo.com"
+  kops_cluster_name      = "${terraform.workspace}.kaladaopuiyo.com"
   kops_state_bucket_name = "k8s.kaladaopuiyo.com"
 }
 
@@ -61,7 +61,7 @@ module "kops_cluster" {
   force_destroy          = "${var.force_destroy}"
   instance_tenancy       = "${var.instance_tenancy}"
   keypair_name           = "${local.keypair_name}"
-  kops_cluster_name      = "${terraform.workspace}.${local.kops_cluster_name}"
+  kops_cluster_name      = "${local.kops_cluster_name}"
   kops_state_bucket_name = "${local.kops_state_bucket_name}"
   kubernetes_version     = "${var.kubernetes_version}"
   master_count           = "${var.master_count}"
@@ -83,6 +83,10 @@ module "kops_cluster" {
   update_cluster         = "${var.update_cluster}"
   vpc_cidr               = "${var.vpc_cidr}"
   zones                  = "${var.zones}"
+}
+
+module "kops_iam" {
+  source = "./modules/kops_iam"
 }
 
 module "kops_utilities" {

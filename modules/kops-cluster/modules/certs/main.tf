@@ -9,6 +9,6 @@ data "aws_acm_certificate" "domain_cert" {
 
 module "kops_keypair" {
   name   = "${var.keypair_name}"
-  path   = "${path.root}/keys"
+  path   = "${path.root}/keys/${terraform.workspace}/"
   source = "mitchellh/dynamic-keys/aws"
 }
