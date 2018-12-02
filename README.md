@@ -104,6 +104,7 @@ ssh core@{api or bastion}.{terraform.workspace}.{kops_cluster_name} -i {project.
 ## **TODO**
 
 - ~~BUG: If prevent cluster destroy from running when a command other than destroy is requested~~ Seems to be fixed will continue to observer behavior
+- Implement [aws-iam-authenticator](https://github.com/kubernetes-sigs/aws-iam-authenticator#kops-usage)
 
 - Complete Networking Abstraction from Auto-Gen Terraform code.
 - Test Updating remaining parameters
