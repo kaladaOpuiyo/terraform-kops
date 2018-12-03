@@ -13,6 +13,25 @@ the destroy command to delete all cluster resources once done.
 - [**Kops**](https://github.com/kubernetes/kops/blob/master/docs/install.md)
 - [**Terraform**](https://youdontgetalink.lookitupyaself)
 
+## **Kops-Cluster Modules**
+
+- Certs: Used to create private and public keys.
+- kops: Heart of all kops related actions
+- networking: Currently only a vpc abrstraction
+- s3: Bucket to hold kops state
+
+## **Kops-Utilities Modules**
+
+All charts are base line configs nothing special.
+
+- consul
+- envoy
+- vault
+- fluentd_elasticsearch
+- k8s_dashboard
+- metrics_server
+- rook
+
 ## **Usage**
 
 **Intialize Terraform**
@@ -42,25 +61,25 @@ make create_terraform
 **Create Cluster**
 
 ```bash
-make create_cluster
+make create_cluster (module=name)
 ```
 
 **Create Utilities Services**
 
 ```bash
-make create_utilities
+make create_utilities (module=name)
 ```
 
 **Updates Cluster**
 
 ```bash
-make update_cluster
+make update_cluster (module=kops)
 ```
 
 **Plan Cluster**
 
 ```bash
-make plan_cluster
+make plan_cluster (module=name)
 ```
 
 **Plan Kops IAM**
@@ -72,13 +91,13 @@ make plan_user
 **Plan Utilities**
 
 ```bash
-make plan_utilities
+make plan_utilities (module=name)
 ```
 
 **Delete Cluster**
 
 ```bash
-make destroy_cluster
+make destroy_cluster (module=name)
 ```
 
 **Delete Kops IAM**
@@ -90,7 +109,7 @@ make destroy_user
 **Delete Utilities**
 
 ```bash
-make destroy_utilities
+make destroy_utilities (module=name)
 ```
 
 **Login into cluster instance**
@@ -103,7 +122,7 @@ ssh core@{api or bastion}.{terraform.workspace}.{kops_cluster_name} -i {project.
 
 ## **TODO**
 
-- ~~BUG: If prevent cluster destroy from running when a command other than destroy is requested~~ Seems to be fixed will continue to observer behavior
+- ~~BUG: Prevent cluster destroy from running when a command other than destroy is requested~~ Seems to be fixed will continue to observer behavior
 - Implement [aws-iam-authenticator](https://github.com/kubernetes-sigs/aws-iam-authenticator#kops-usage)
 
 - Complete Networking Abstraction from Auto-Gen Terraform code.
@@ -130,3 +149,5 @@ ssh core@{api or bastion}.{terraform.workspace}.{kops_cluster_name} -i {project.
   - https://github.com/kubernetes/kops/pull/5414 - related pull request
   - https://github.com/ramitsurana/awesome-kubernetes
   - https://github.com/hashicorp/terraform/issues/18026
+  - https://github.com/hashicorp/terraform/issues/13549
+  - Interesting EKS vs KOPS chat: https://github.com/kubernetes/kops/issues/5001

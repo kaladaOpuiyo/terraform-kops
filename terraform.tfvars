@@ -9,11 +9,11 @@ master_size = "t2.medium" #UPDATEABLE
 
 master_volume_size = "20" #UPDATEABLE
 
-master_zone = "us-east-1a,us-east-1c,us-east-1b" #BUGGY
+master_zone = "us-east-1a" #BUGGY
 
-master_count = "3" #BUGGY
+master_count = "1" #BUGGY
 
-node_size = "t2.medium" #UPDATEABLE
+node_size = "t2.micro" #UPDATEABLE
 
 node_volume_size = "20" #UPDATEABLE
 
@@ -21,7 +21,7 @@ node_count = "3" #UPDATEABLE
 
 zones = "us-east-1a,us-east-1c,us-east-1b"
 
-networking = "calico"
+networking = "flannel"
 
 network_cidr = "10.0.0.0/16"
 

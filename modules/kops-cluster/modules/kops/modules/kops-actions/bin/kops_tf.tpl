@@ -1,6 +1,5 @@
 #!/bin/bash
 
-# Exit if any of the intermediate steps fail
 
 TF_FILES=${path_root}/${out}/${workspace}/kubernetes.tf
 TF_PLAN=${path_root}/tmp/${workspace}_cluster.tfplan
