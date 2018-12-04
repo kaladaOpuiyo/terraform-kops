@@ -87,7 +87,7 @@ endif
 
 
 plan_user: ## Run a plan on the kops_iam module
-	terraform plan -target=module.kops_utilities
+	terraform plan -target=module.kops_iam
 
 update_cluster: ## Run a rolling update against the cluster
 ifdef module

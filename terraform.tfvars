@@ -1,69 +1,69 @@
-target = "terraform"
+acl = "private"
 
-out = ".kops-tf"
+admin_access = "0.0.0.0/0"
 
 #CoreOs AMI
 ami = "ami-03ed1c12a1dd84320"
 
-master_size = "t2.medium" #UPDATEABLE
-
-master_volume_size = "20" #UPDATEABLE
-
-master_zone = "us-east-1a" #BUGGY
-
-master_count = "1" #BUGGY
-
-node_size = "t2.micro" #UPDATEABLE
-
-node_volume_size = "20" #UPDATEABLE
-
-node_count = "3" #UPDATEABLE
-
-zones = "us-east-1a,us-east-1c,us-east-1b"
-
-networking = "flannel"
-
-network_cidr = "10.0.0.0/16"
-
-topology = "public"
-
-api_loadbalancer_type = ""
+api_loadbalancer_type = "public"
 
 associate_public_ip = "true"
 
-output = "yaml"
-
 authorization = "RBAC"
-
-cloud = "aws"
-
-encrypt_etcd_storage = "true"
-
-env = "dev"
-
-region = "us-east-1"
-
-force_destroy = "true"
-
-acl = "private"
 
 bastion = "false"
 
-admin_access = "0.0.0.0/0"
+cloud = "aws"
 
 cloud_labels = "Owner=Kalada Opuiyo"
 
 dns = "public"
 
-kubernetes_version = "v1.11.0"
+enable_dns_hostnames = "true"
 
-enable_dns_support = true
+enable_dns_support = "true"
 
-enable_dns_hostnames = true
+encrypt_etcd_storage = "true"
+
+env = "dev"
+
+force_destroy = "true"
 
 instance_tenancy = "default"
 
+kubernetes_version = "v1.11.0"
+
+master_count = "3" #BUGGY
+
+master_size = "t2.medium" #UPDATEABLE
+
+master_volume_size = "20" #UPDATEABLE
+
+master_zone = "us-east-1a,us-east-1c,us-east-1b" #BUGGY
+
+network_cidr = "10.0.0.0/16"
+
+networking = "flannel"
+
+node_count = "3" #UPDATEABLE
+
+node_size = "t2.micro" #UPDATEABLE
+
+node_volume_size = "20" #UPDATEABLE
+
+out = ".kops-tf"
+
+output = "yaml"
+
+region = "us-east-1"
+
+target = "terraform"
+
+topology = "public"
+
 vpc_cidr = "10.0.0.0/16"
+
+zones = "us-east-1a,us-east-1c,us-east-1b"
 
 ######### NOT SETUP FUTURE UPGRADE - SUBNET MANAGEMENT #########
 

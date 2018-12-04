@@ -145,9 +145,10 @@ ssh core@{api or bastion}.{terraform.workspace}.{kops_cluster_name} -i {project.
 - Calico Deep Dive
 - https://github.com/bitnami-labs/kubewatch
 - Research Issue
-  - https://github.com/kubernetes/kops/issues/834 - This issues directly relates to ACM+ELB cluster creation.
+  - ~~https://github.com/kubernetes/kops/issues/834 - This issues directly relates to ACM+ELB cluster creation.~~ ISSUE resolved on kops master branch
   - https://github.com/kubernetes/kops/pull/5414 - related pull request
   - https://github.com/ramitsurana/awesome-kubernetes
   - https://github.com/hashicorp/terraform/issues/18026
   - https://github.com/hashicorp/terraform/issues/13549
   - Interesting EKS vs KOPS chat: https://github.com/kubernetes/kops/issues/5001
+  - ~~https://github.com/kubernetes/kops/issues/5757 -relates to ACM+ELB cluster creation with terraform~~ ISSUE resolved on kops master branch

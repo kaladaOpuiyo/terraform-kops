@@ -12,9 +12,9 @@ terraform {
 }
 
 provider "helm" {
-  debug           = true
+  debug           = "true"
   enable_tls      = "false"
-  install_tiller  = false
+  install_tiller  = "false"
   namespace       = "kube-system"
   service_account = "tiller"
 
@@ -27,7 +27,7 @@ locals {
   cluster_region = "us-east-1"
 
   #Used to retrive the dommain certificate info
-  domain_name            = "www.kaladaopuiyo.com"
+  domain_name            = "api.${terraform.workspace}.kaladaopuiyo.com"
   keypair_name           = "${terraform.workspace}_cluster_kalada_opuiyo.com"
   kops_cluster_name      = "${terraform.workspace}.kaladaopuiyo.com"
   kops_state_bucket_name = "k8s.kaladaopuiyo.com"

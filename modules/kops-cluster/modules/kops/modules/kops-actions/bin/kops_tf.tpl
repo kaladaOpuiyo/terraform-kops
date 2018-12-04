@@ -98,7 +98,7 @@ sleep 30
      if [[ ${update_cluster} == true ]] || [[ ${need_update} == true ]];
          then
             while [ 1 ]; do kops rolling-update cluster \
-            --fail-on-validate-error="false" \
+            --fail-on-drain-error \
             --name=${kops_cluster_name} --state=${kops_state_store} --yes \
             && break || sleep 5; done;
 
