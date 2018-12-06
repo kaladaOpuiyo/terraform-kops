@@ -53,3 +53,12 @@ module "checks" {
   kops_state_store       = "${var.kops_state_bucket_name}"
   kops_state_bucket_name = "${var.kops_state_bucket_name}"
 }
+
+module "addons" {
+  source = "./modules/addons"
+
+  kops_cluster_name      = "${var.kops_cluster_name}"
+  kops_state_store       = "${var.kops_state_store}"
+  kops_state_bucket_name = "${var.kops_state_bucket_name}"
+  cluster_deployed       = "${module.checks.cluster_deployed}"
+}
