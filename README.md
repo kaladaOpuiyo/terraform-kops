@@ -128,6 +128,7 @@ ssh core@{api or bastion}.{terraform.workspace}.{kops_cluster_name} -i {project.
 - Complete Networking Abstraction from Auto-Gen Terraform code.
 - Enable Addon for [cluster-autoscaler](https://github.com/kubernetes/kops/tree/master/addons/cluster-autoscaler)
 - Test Updating remaining parameters
+- Determine how to include non Kops related k8s config options ( e.g maxSize or minSize) into the cluster creation process. Should this occur as an update immediately after cluster creation???
 - ~~Added Makefile :)~~
 - ~~Introduce additional k8s utilities services (envoy,vault)~~ DONE
 - Further parameterize helm install utilities
