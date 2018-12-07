@@ -1,12 +1,10 @@
 data "aws_region" "current" {}
 
 locals {
-  addon                   = "tmp/cluster-autoscaler.yml"
+  autoscaler              = "tmp/cluster-autoscaler.yml"
   cluster_auto_scaler_url = "https://raw.githubusercontent.com/kubernetes/kops/master/addons/cluster-autoscaler/v1.10.0.yaml"
   image                   = "k8s.gcr.io/cluster-autoscaler:v1.1.0"
-  instance_group_name     = "nodes"
-  max_nodes               = "10"
-  min_nodes               = "2"
+  instance_group          = "nodes"
   provider                = "aws"
   ssl_cert_path           = "/etc/ssl/certs/ca.crt"
 }
@@ -15,19 +13,20 @@ data "template_file" "cluster_auto_scaler" {
   template = "${file("${path.module}/bin/cluster_autoscaler.tpl")}"
 
   vars {
-    addon                   = "${local.addon}"
-    asg_name                = "${local.instance_group_name}.${var.kops_cluster_name}"
+    autoscaler              = "${local.autoscaler}"
     aws_region              = "${data.aws_region.current.name}"
     cloud_provider          = "${local.provider}"
     cluster_auto_scaler_url = "${local.cluster_auto_scaler_url}"
+    cluster_deployed        = "${var.cluster_deployed}"
     cluster_name            = "${var.kops_cluster_name}"
+    group_name              = "${local.instance_group}.${var.kops_cluster_name}"
     iam_role                = "masters.${var.kops_cluster_name}"
     image                   = "${local.image}"
-    group_name              = "${local.instance_group_name}"
-    kops_state_store        = "${var.kops_state_store}"
+    instance_group          = "${local.instance_group}"
     kops_cluster_name       = "${var.kops_cluster_name}"
-    max_nodes               = "${local.max_nodes}"
-    min_nodes               = "${local.min_nodes}"
+    kops_state_bucket_name  = "${var.kops_state_bucket_name}"
+    max_nodes               = "${var.max_nodes}"
+    min_nodes               = "${var.min_nodes}"
     ssl_cert_path           = "${local.ssl_cert_path}"
   }
 }
@@ -70,4 +69,11 @@ EOF
 resource "aws_iam_role_policy_attachment" "cluster_autoscaler_policy" {
   role       = "masters.${var.kops_cluster_name}"
   policy_arn = "${aws_iam_policy.cluster_autoscaler_policy.arn}"
+}
+
+resource "null_resource" "destroy_cluster_autoscaler" {
+  provisioner "local-exec" {
+    command = "kubectl delete deploy  cluster-autoscaler -n kube-system"
+    when    = "destroy"
+  }
 }

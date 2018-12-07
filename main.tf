@@ -66,6 +66,8 @@ module "kops_cluster" {
   kubernetes_version     = "${var.kubernetes_version}"
   master_count           = "${var.master_count}"
   master_size            = "${var.master_size}"
+  max_nodes              = "${var.max_nodes}"
+  min_nodes              = "${var.min_nodes}"
   master_volume_size     = "${var.master_volume_size}"
   master_zone            = "${var.master_zone}"
   network_cidr           = "${var.network_cidr}"
@@ -98,4 +100,14 @@ module "kops_utilities" {
   depends_on = [
     "${module.kops_cluster.cluster_exist}",
   ]
+}
+
+module "kops_addons" {
+  source = "./modules/kops-addons"
+
+  kops_cluster_name      = "${local.kops_cluster_name}"
+  kops_state_bucket_name = "${local.kops_state_bucket_name}"
+  cluster_deployed       = "${module.kops_cluster.cluster_deployed}"
+  max_nodes              = "${var.max_nodes}"
+  min_nodes              = "${var.min_nodes}"
 }
