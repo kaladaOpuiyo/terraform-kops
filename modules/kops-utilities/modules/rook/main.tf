@@ -1,5 +1,5 @@
 resource "helm_repository" "rook_beta" {
-  name = "rock-beta"
+  name = "rook-beta"
   url  = "https://charts.rook.io/beta"
 }
 
@@ -15,7 +15,7 @@ resource "helm_release" "rook_beta" {
   ]
 }
 
-resource "kubernetes_cluster_role_binding" "rook_stable" {
+resource "kubernetes_cluster_role_binding" "rook_beta" {
   metadata {
     name = "rook"
   }

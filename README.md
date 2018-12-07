@@ -64,6 +64,12 @@ make create_terraform
 make create_cluster (module=name)
 ```
 
+**Create addons**
+
+```bash
+make create_addons (module=name)
+```
+
 **Create Utilities Services**
 
 ```bash
@@ -88,6 +94,12 @@ make plan_cluster (module=name)
 make plan_user
 ```
 
+**Plan addons**
+
+```bash
+make plan_addons (module=name)
+```
+
 **Plan Utilities**
 
 ```bash
@@ -104,6 +116,12 @@ make destroy_cluster (module=name)
 
 ```bash
 make destroy_user
+```
+
+**Delete addons**
+
+```bash
+make destroy_addons (module=name)
 ```
 
 **Delete Utilities**
@@ -126,7 +144,7 @@ ssh core@{api or bastion}.{terraform.workspace}.{kops_cluster_name} -i {project.
 - Implement [aws-iam-authenticator](https://github.com/kubernetes-sigs/aws-iam-authenticator#kops-usage)
 
 - Complete Networking Abstraction from Auto-Gen Terraform code.
-- Enable Addon for [cluster-autoscaler](https://github.com/kubernetes/kops/tree/master/addons/cluster-autoscaler)
+- ~~Enable Addon for [cluster-autoscaler](https://github.com/kubernetes/kops/tree/master/addons/cluster-autoscaler)~~ enabled for worker nodes. Should consider enabling on masters.
 - Test Updating remaining parameters
 - ~~Added Makefile :)~~
 - ~~Introduce additional k8s utilities services (envoy,vault)~~ DONE

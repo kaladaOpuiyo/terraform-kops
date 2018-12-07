@@ -41,6 +41,8 @@ module "kops" {
   kubernetes_version     = "${var.kubernetes_version}"
   master_count           = "${var.master_count}"
   master_size            = "${var.master_size}"
+  max_nodes              = "${var.max_nodes}"
+  min_nodes              = "${var.min_nodes}"
   master_volume_size     = "${var.master_volume_size}"
   master_zone            = "${var.master_zone}"
   network_cidr           = "${module.networking.network_cidr}"
