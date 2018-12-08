@@ -2,10 +2,13 @@ acl = "private"
 
 admin_access = "0.0.0.0/0"
 
-#CoreOs AMI
-ami = "ami-03ed1c12a1dd84320"
+# #CoreOs AMI
+# ami = "ami-03ed1c12a1dd84320"
 
-api_loadbalancer_type = "public"
+#Default AMI
+ami = "ami-03b850a018c8cd25e"
+
+api_loadbalancer_type = ""
 
 associate_public_ip = "true"
 
@@ -41,13 +44,17 @@ master_volume_size = "20" #UPDATEABLE
 
 master_zone = "us-east-1a,us-east-1c,us-east-1b" #BUGGY
 
+max_nodes = "5"
+
+min_nodes = "1"
+
 network_cidr = "10.0.0.0/16"
 
-networking = "flannel"
+networking = "calico"
 
-node_count = "3" #UPDATEABLE
+node_count = "1" #UPDATEABLE
 
-node_size = "t2.micro" #UPDATEABLE
+node_size = "t2.medium" #UPDATEABLE
 
 node_volume_size = "20" #UPDATEABLE
 

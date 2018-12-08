@@ -30,8 +30,10 @@ module "vault" {
   depends_on = ["${module.consul.service_name}"]
 }
 
-module "rook" {
-  source = "./modules/rook"
+# module "rook" {
+#   source = "./modules/rook"
 
-  tiller_namespace = "${var.tiller_namespace}"
-}
+
+#   tiller_namespace = "${var.tiller_namespace}"
+# }
+

@@ -12,9 +12,7 @@ variable "cluster_bucket" {}
 variable "cluster_key" {}
 variable "cluster_region" {}
 variable "deploy_cluster" {}
-
 variable "destroy_cluster" {}
-
 variable "dns" {}
 variable "domain_cert_arn" {}
 variable "domain_name" {}
@@ -34,6 +32,8 @@ variable "master_count" {}
 variable "master_size" {}
 variable "master_volume_size" {}
 variable "master_zone" {}
+variable "max_nodes" {}
+variable "min_nodes" {}
 variable "network_cidr" {}
 variable "networking" {}
 variable "node_count" {}

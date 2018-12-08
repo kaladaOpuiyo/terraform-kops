@@ -20,6 +20,10 @@ the destroy command to delete all cluster resources once done.
 - networking: Currently only a vpc abrstraction
 - s3: Bucket to hold kops state
 
+## **Kops-Cluster Addons**
+
+- cluster-autoscaler
+
 ## **Kops-Utilities Modules**
 
 All charts are base line configs nothing special.
@@ -64,6 +68,12 @@ make create_terraform
 make create_cluster (module=name)
 ```
 
+**Create addons**
+
+```bash
+make create_addons (module=name)
+```
+
 **Create Utilities Services**
 
 ```bash
@@ -88,6 +98,12 @@ make plan_cluster (module=name)
 make plan_user
 ```
 
+**Plan addons**
+
+```bash
+make plan_addons (module=name)
+```
+
 **Plan Utilities**
 
 ```bash
@@ -104,6 +120,12 @@ make destroy_cluster (module=name)
 
 ```bash
 make destroy_user
+```
+
+**Delete addons**
+
+```bash
+make destroy_addons (module=name)
 ```
 
 **Delete Utilities**
@@ -126,7 +148,7 @@ ssh core@{api or bastion}.{terraform.workspace}.{kops_cluster_name} -i {project.
 - Implement [aws-iam-authenticator](https://github.com/kubernetes-sigs/aws-iam-authenticator#kops-usage)
 
 - Complete Networking Abstraction from Auto-Gen Terraform code.
-- Enable Addon for [cluster-autoscaler](https://github.com/kubernetes/kops/tree/master/addons/cluster-autoscaler)
+- ~~Enable Addon for [cluster-autoscaler](https://github.com/kubernetes/kops/tree/master/addons/cluster-autoscaler)~~ enabled for worker nodes. DONE
 - Test Updating remaining parameters
 - Determine how to include non Kops related k8s config options ( e.g maxSize or minSize) into the cluster creation process. Should this occur as an update immediately after cluster creation???
 - ~~Added Makefile :)~~
