@@ -145,8 +145,10 @@ ssh core@{api or bastion}.{terraform.workspace}.{kops_cluster_name} -i {project.
 ## **TODO**
 
 - ~~BUG: Prevent cluster destroy from running when a command other than destroy is requested~~ Seems to be fixed will continue to observer behavior
+- Refactor kops_actions module.Every tpl should be its own module
+- Integrate autoscaler and istio into the cluster creation process
+- Redesign the cluster creation process. yaml -> terraform -> Helm -> Istio ???
 - Implement [aws-iam-authenticator](https://github.com/kubernetes-sigs/aws-iam-authenticator#kops-usage)
-
 - Complete Networking Abstraction from Auto-Gen Terraform code.
 - ~~Enable Addon for [cluster-autoscaler](https://github.com/kubernetes/kops/tree/master/addons/cluster-autoscaler)~~ enabled for worker nodes. DONE
 - Test Updating remaining parameters
