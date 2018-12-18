@@ -37,7 +37,7 @@ resource "null_resource" "cluster_init" {
 
 resource "null_resource" "tiller_rbac" {
   provisioner "local-exec" {
-    command = "while [ 1 ]; do  kubectl create -f ${path_root}/tiller-rbac/rbac-config.yaml && break || sleep 5; done;"
+    command = "while [ 1 ]; do  kubectl create -f ${path_module}/tiller-rbac/rbac-config.yaml && break || sleep 5; done;"
   }
   depends_on = ["null_resource.cluster_init"]
 }
@@ -90,6 +90,41 @@ applyKopsTerraform(){
     fi
 }
 
+kopsCreateTerraformFiles(){
+    echo '<======kopsCreateTerraform======>'
+    kops create cluster \
+       --name=${kops_cluster_name} \
+       --state=${kops_state_store} \
+       --image=${image} \
+       --master-size=${master_size} \
+       --master-volume-size=${master_volume_size} \
+       --master-zones=${master_zone} \
+       --master-count=${master_count} \
+       --node-size=${node_size} \
+       --node-volume-size=${node_volume_size} \
+       --node-count=${node_count} \
+       --zones=${zones} \
+       --admin-access=${admin_access} \
+       --associate-public-ip=${associate_public_ip} \
+       --topology=${topology} \
+       --network-cidr=${network_cidr} \
+       --networking=${networking} \
+       --vpc=${vpc} \
+       --bastion=${bastion} \
+       --target=${target} \
+       --api-ssl-certificate=${api_ssl_certificate} \
+       --api-loadbalancer-type=${api_loadbalancer_type} \
+       --authorization=${authorization} \
+       --encrypt-etcd-storage=${encrypt_etcd_storage} \
+       --kubernetes-version=${kubernetes_version} \
+       --dns=${dns} \
+       --cloud-labels="${cloud_labels}" \
+       --cloud=${cloud} \
+       --ssh-public-key=${ssh_public_key} \
+       --out=${path_root}/${out}/${workspace} \
+       --yes
+
+}
 
 
 rollingUpdateCheck(){
@@ -104,10 +139,12 @@ sleep 30
 
      fi
 }
+
 ########################################################################################################################
 # Main
 ########################################################################################################################
 
+kopsCreateTerraformFiles
 addRemoteState
 addHelmProvider
 applyKopsTerraform

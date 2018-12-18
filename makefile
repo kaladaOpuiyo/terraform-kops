@@ -65,9 +65,11 @@ create_yaml: ## Creates terraform auto-genrated code for cluster , sets -var 'dr
 destroy_cluster: ## Destroys cluster,specific utility, module=name
 
 ifdef module
-	terraform destroy -target=module.kops_cluster.module.$(module)
+	terraform destroy -target=module.kops_cluster.module.$(module) \
+	-var 'destroy_cluster=true'
 else
-	terraform destroy -target=module.kops_cluster
+	terraform destroy -target=module.kops_cluster \
+	-var 'destroy_cluster=true'
 endif
 
 destroy_user: ## Removes kops user and associated resources from iam

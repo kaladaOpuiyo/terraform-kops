@@ -1,5 +1,5 @@
-module "kops_actions" {
-  source = "./modules/kops-actions"
+module "actions" {
+  source = "./modules/actions"
 
   admin_access           = "${var.admin_access}"
   api_loadbalancer_type  = "${var.api_loadbalancer_type}"

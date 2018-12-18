@@ -36,17 +36,17 @@ instance_tenancy = "default"
 
 kubernetes_version = "v1.11.0"
 
-master_count = "3" #BUGGY
+master_count = "1" #BUGGY
 
 master_size = "t2.medium" #UPDATEABLE
 
 master_volume_size = "20" #UPDATEABLE
 
-master_zone = "us-east-1a,us-east-1c,us-east-1b" #BUGGY
+master_zone = "us-east-1a" #BUGGY
 
-max_nodes = "5"
+max_nodes = "3"
 
-min_nodes = "1"
+min_nodes = "2"
 
 network_cidr = "10.0.0.0/16"
 
@@ -70,7 +70,7 @@ topology = "public"
 
 vpc_cidr = "10.0.0.0/16"
 
-zones = "us-east-1a,us-east-1c,us-east-1b"
+zones = "us-east-1a,us-east-1c"
 
 ######### NOT SETUP FUTURE UPGRADE - SUBNET MANAGEMENT #########
 
