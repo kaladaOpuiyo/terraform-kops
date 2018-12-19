@@ -1,60 +1,61 @@
+locals {
+  helm_repository_url = "https://storage.googleapis.com/istio-prerelease/daily-build/master-latest-daily/charts"
+  istio_repo          = "https://git.io/getLatestIstio"
+
+  istio_version = "1.0.5"
+}
+
 resource "kubernetes_namespace" "istio" {
   metadata {
-    # annotations {  #   name = "example-annotation"  # }
-
-    labels {
-      mylabel = "istio-system"
-    }
-
     name = "istio-system"
   }
 }
 
-resource "helm_repository" "ibm" {
-  name = "ibm"
-  url  = "https://registry.bluemix.net/helm/ibm-charts"
+resource "helm_repository" "istio" {
+  name = "istio.io"
+  url  = "${local.helm_repository_url}"
 }
 
-resource "helm_repository" "ibm_charts" {
-  name = "ibm-charts"
-  url  = "https://registry.bluemix.net/helm/ibm-charts"
+resource "null_resource" "istio_repo" {
+  provisioner "local-exec" {
+    command = "cd ${path.root}/tmp && curl -L ${local.istio_repo} | sh -"
+  }
 }
 
 resource "helm_release" "istio" {
-  name       = "istio"
-  repository = "${helm_repository.ibm_charts.metadata.0.name}"
-  chart      = "ibm-charts/ibm-istio"
-
+  name      = "istio"
   namespace = "istio-system"
 
-  #   set {
-  #     name  = "servicegraph.enabled"
-  #     value = true
-  #   }
+  chart = "${path.root}/tmp/istio-${local.istio_version}/install/kubernetes/helm/istio"
+
+  # set {
+  #   name  = "servicegraph.enabled"
+  #   value = true
+  # }
 
 
-  #   set {
-  #     name  = "tracing.enabled"
-  #     value = true
-  #   }
+  # set {
+  #   name  = "tracing.enabled"
+  #   value = true
+  # }
 
 
-  #   set {
-  #     name  = "kiali.enabled"
-  #     value = true
-  #   }
+  # set {
+  #   name  = "kiali.enabled"
+  #   value = true
+  # }
 
 
-  #   set {
-  #     name  = "servicegraph.enabled"
-  #     value = true
-  #   }
+  # set {
+  #   name  = "servicegraph.enabled"
+  #   value = true
+  # }
 
 
-  #   set {
-  #     name  = "grafana.enabled"
-  #     value = true
-  #   }
+  # set {
+  #   name  = "grafana.enabled"
+  #   value = true
+  # }
 
   provisioner "local-exec" {
     command = "kubectl get customresourcedefinition  -n istio-system | grep 'istio'|awk '{print $1}'|xargs kubectl delete customresourcedefinition  -n istio-system"

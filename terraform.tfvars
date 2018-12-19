@@ -34,7 +34,7 @@ force_destroy = "true"
 
 instance_tenancy = "default"
 
-kubernetes_version = "v1.11.0"
+kubernetes_version = "v1.11.5"
 
 master_count = "1" #BUGGY
 
@@ -52,7 +52,7 @@ network_cidr = "10.0.0.0/16"
 
 networking = "calico"
 
-node_count = "1" #UPDATEABLE
+node_count = "2" #UPDATEABLE
 
 node_size = "t2.medium" #UPDATEABLE
 
