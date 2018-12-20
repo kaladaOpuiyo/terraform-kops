@@ -24,6 +24,11 @@ module "consul" {
 
 module "istio" {
   source = "./modules/istio"
+
+  helm_repository_url    = "${var.istio_helm_repository_url}"
+  istio_install_test_app = "${var.istio_install_test_app}"
+  istio_repo             = "${var.istio_repo}"
+  istio_version          = "${var.istio_version}"
 }
 
 module "vault" {
