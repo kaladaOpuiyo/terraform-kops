@@ -15,7 +15,7 @@ resource "helm_repository" "istio" {
 
 resource "null_resource" "istio_repo" {
   provisioner "local-exec" {
-    command = "cd ${path.root}/tmp && curl -L ${var.istio_repo} | sh -"
+    command = "cd ${path.root}/tmp && curl -L ${var.istio_repo} | sh - && sleep 30"
   }
 }
 
@@ -30,26 +30,27 @@ resource "helm_release" "istio" {
     value = true
   }
 
+  set {
+    name  = "grafana.enabled"
+    value = true
+  }
+
+  provisioner "local-exec" {
+    command = "kubectl get customresourcedefinition  -n istio-system | grep 'istio'|awk '{print $1}'|xargs kubectl delete customresourcedefinition  -n istio-system"
+    when    = "destroy"
+  }
+
+  depends_on = ["kubernetes_namespace.istio"]
+
   # set {
   #   name  = "tracing.enabled"
   #   value = true
   # }
 
-
   # set {
   #   name  = "kiali.enabled"
   #   value = true
   # }
-
-  set {
-    name  = "grafana.enabled"
-    value = true
-  }
-  depends_on = ["kubernetes_namespace.istio"]
-  provisioner "local-exec" {
-    command = "kubectl get customresourcedefinition  -n istio-system | grep 'istio'|awk '{print $1}'|xargs kubectl delete customresourcedefinition  -n istio-system"
-    when    = "destroy"
-  }
 }
 
 resource "null_resource" "instio_injection" {

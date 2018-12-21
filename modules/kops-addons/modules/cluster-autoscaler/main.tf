@@ -31,13 +31,9 @@ data "template_file" "cluster_auto_scaler" {
   }
 }
 
-resource "local_file" "cluster_auto_scaler" {
-  content = "${data.template_file.cluster_auto_scaler.rendered}"
-
-  filename = "${path.root}/tmp/${sha1(data.template_file.cluster_auto_scaler.rendered)}.sh"
-
+resource "null_resource" "cluster_auto_scaler" {
   provisioner "local-exec" {
-    command = "${self.filename}"
+    command = "${data.template_file.cluster_auto_scaler.rendered}"
   }
 }
 

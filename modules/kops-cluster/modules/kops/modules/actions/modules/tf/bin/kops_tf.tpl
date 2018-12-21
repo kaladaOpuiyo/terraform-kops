@@ -146,6 +146,6 @@ sleep 30
 
 kopsCreateTerraformFiles
 addRemoteState
-addHelmProvider
-applyKopsTerraform
-rollingUpdateCheck
+#addHelmProvider
+#applyKopsTerraform
+#rollingUpdateCheck

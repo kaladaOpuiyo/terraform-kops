@@ -1,13 +1,9 @@
-resource "local_file" "kops_update" {
-  count    = "${var.dry_run == "false" && var.update_cluster == "true"  ? 1:0}"
-  content  = "${data.template_file.kops_update.rendered}"
-  filename = "${path.root}/tmp/${sha1(data.template_file.kops_update.rendered)}.sh"
+resource "null_resource" "kops_update" {
+  count = "${var.dry_run == "false" && var.update_cluster == "true"  ? 1:0}"
 
   provisioner "local-exec" {
-    command = "${self.filename}"
+    command = "${data.template_file.kops_update.rendered}"
   }
-
-  # depends_on = ["local_file.kops_init"]
 }
 
 data "template_file" "kops_update" {

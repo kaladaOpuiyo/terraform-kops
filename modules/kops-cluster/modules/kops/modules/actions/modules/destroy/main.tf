@@ -4,20 +4,13 @@ resource "null_resource" "kops_destroy" {
   }
 
   provisioner "local-exec" {
-    command = "${path.root}/tmp/${var.kops_cluster_name}_destroy.sh"
+    command = "${data.template_file.kops_destroy.rendered}"
     when    = "destroy"
   }
-
-  depends_on = ["local_file.kops_destroy"]
-}
-
-resource "local_file" "kops_destroy" {
-  content  = "${data.template_file.kops_destroy.rendered}"
-  filename = "${path.root}/tmp/${var.kops_cluster_name}_destroy.sh"
 }
 
 data "template_file" "kops_destroy" {
-  template = "${file("${path.module}/bin/kops_destroy.tpl")}"
+  template = "${file("${path.module}/template/kops_destroy.tpl")}"
 
   vars {
     kops_state_store  = "${var.kops_state_store}"

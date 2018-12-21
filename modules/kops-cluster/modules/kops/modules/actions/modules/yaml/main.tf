@@ -1,10 +1,8 @@
-resource "local_file" "kops_yaml" {
-  count    = "${var.update_cluster=="true" ? 0 : 1}"
-  content  = "${data.template_file.kops_yaml.rendered}"
-  filename = "${path.root}/tmp/${sha1(data.template_file.kops_yaml.rendered)}.sh"
+resource "null_resource" "kops_yaml" {
+  count = "${var.update_cluster=="true" ? 0 : 1}"
 
   provisioner "local-exec" {
-    command = "${self.filename}"
+    command = "${data.template_file.kops_yaml.rendered}"
   }
 }
 
