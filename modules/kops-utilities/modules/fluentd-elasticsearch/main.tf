@@ -2,10 +2,6 @@ resource "helm_release" "fluentd_elasticsearch" {
   name      = "fluentd-elasticsearch"
   chart     = "stable/fluentd-elasticsearch"
   namespace = "${var.tiller_namespace}"
-
-  values = [
-    "${file("${path.module}/chart/values.yaml")}",
-  ]
 }
 
 resource "kubernetes_cluster_role_binding" "fluentd_elasticsearch" {

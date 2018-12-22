@@ -166,9 +166,9 @@ ssh core@{api or bastion}.{terraform.workspace}.{kops_cluster_name} -i {project.
 - Create a Lambda function to backup and snapshot the etcd volumes for recovery
 - create a DR proceedure
 - Install end user apps and figure out DNS switching for blue/green deployments
-- ~~Added Rook~~ DONE
+- ~~Added Rook~~ DONE, **SO** you need to add ceph and set up proper distributed storage
 - Determine approach for standardizing liveness and readyness probes
-- Calico Deep Dive
+- ~~Calico Deep Dive~~ Played around with setup network policies. Nothing like the realworld to test your skills :)
 - https://github.com/bitnami-labs/kubewatch
 - Research Issue
   - ~~https://github.com/kubernetes/kops/issues/834 - This issues directly relates to ACM+ELB cluster creation.~~ ISSUE resolved on kops master branch
@@ -178,3 +178,4 @@ ssh core@{api or bastion}.{terraform.workspace}.{kops_cluster_name} -i {project.
   - https://github.com/hashicorp/terraform/issues/13549
   - Interesting EKS vs KOPS chat: https://github.com/kubernetes/kops/issues/5001
   - ~~https://github.com/kubernetes/kops/issues/5757 -relates to ACM+ELB cluster creation with terraform~~ ISSUE resolved on kops master branch
+    Delete All Helm Charts= helm delete $(helm list --all | awk '{if (NR!=1) {print $1}}') --purge

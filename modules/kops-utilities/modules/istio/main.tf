@@ -68,7 +68,7 @@ resource "null_resource" "instio_injection" {
   depends_on = ["helm_release.istio"]
 }
 
-resource "null_resource" "istio_test_app_service" {
+resource "null_resource" "istio_test_app" {
   count = "${var.istio_install_test_app ? 1 : 0}"
 
   provisioner "local-exec" {
@@ -76,7 +76,19 @@ resource "null_resource" "istio_test_app_service" {
   }
 
   provisioner "local-exec" {
-    command = "export PATH=$PATH:${local.istio_path}/bin && ${local.istio_path}/samples/bookinfo/platform/kube/cleanup.sh"
+    command = "kubectl apply -f ${local.istio_path}/samples/bookinfo/networking/bookinfo-gateway.yaml"
+  }
+
+  provisioner "local-exec" {
+    command = "kubectl apply -f ${local.istio_path}/samples/bookinfo/networking/destination-rule-all.yaml"
+  }
+
+  provisioner "local-exec" {
+    command = "kubectl apply -f ${local.istio_path}/samples/bookinfo/networking/destination-rule-all-mtls.yaml"
+  }
+
+  provisioner "local-exec" {
+    command = "export PATH=$PATH:${local.istio_path}/bin/ && ${local.istio_path}/samples/bookinfo/platform/kube/cleanup.sh"
     when    = "destroy"
   }
 

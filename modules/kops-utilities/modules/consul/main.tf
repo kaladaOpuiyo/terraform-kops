@@ -2,10 +2,6 @@ resource "helm_release" "consul" {
   name      = "consul"
   chart     = "stable/consul"
   namespace = "${var.tiller_namespace}"
-
-  values = [
-    "${file("${path.module}/chart/values.yaml")}",
-  ]
 }
 
 resource "kubernetes_cluster_role_binding" "consul" {

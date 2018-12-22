@@ -24,8 +24,4 @@ resource "helm_release" "vault" {
     name  = "vault.config.storage.consul.path"
     value = "vault"
   }
-
-  values = [
-    "${file("${path.module}/chart/values.yaml")}",
-  ]
 }
