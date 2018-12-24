@@ -24,13 +24,13 @@ TEMP=tmp/ig_group.yaml
 clusterAutoScaler(){
 wget -O ${autoscaler} ${cluster_auto_scaler_url}
 
-sed -i -e "s@{{CLOUD_PROVIDER}}@$CLOUD_PROVIDER@g" "${autoscaler}"
-sed -i -e "s@{{IMAGE}}@$IMAGE@g" "${autoscaler}"
-sed -i -e "s@{{MIN_NODES}}@$MIN_NODES@g" "${autoscaler}"
-sed -i -e "s@{{MAX_NODES}}@$MAX_NODES@g" "${autoscaler}"
-sed -i -e "s@{{GROUP_NAME}}@$ASG_NAME@g" "${autoscaler}"
-sed -i -e "s@{{AWS_REGION}}@$AWS_REGION@g" "${autoscaler}"
-sed -i -e "s@{{SSL_CERT_PATH}}@$SSL_CERT_PATH@g" "${autoscaler}"
+sed -i '' "s@{{CLOUD_PROVIDER}}@$CLOUD_PROVIDER@g" "${autoscaler}"
+sed -i '' "s@{{IMAGE}}@$IMAGE@g" "${autoscaler}"
+sed -i '' "s@{{MIN_NODES}}@$MIN_NODES@g" "${autoscaler}"
+sed -i '' "s@{{MAX_NODES}}@$MAX_NODES@g" "${autoscaler}"
+sed -i '' "s@{{GROUP_NAME}}@$ASG_NAME@g" "${autoscaler}"
+sed -i '' "s@{{AWS_REGION}}@$AWS_REGION@g" "${autoscaler}"
+sed -i '' "s@{{SSL_CERT_PATH}}@$SSL_CERT_PATH@g" "${autoscaler}"
 
 kubectl apply -f ${autoscaler}
 }
@@ -40,9 +40,9 @@ updateInstanceGroup(){
 
  kops get ig ${instance_group} --name=$CLUSTER_NAME  --state=s3://${kops_state_bucket_name} -o yaml > $TEMP
 
- sed -i -e '/minSize:.*/ s/: .*/: ${min_nodes}'/  "$TEMP"
+ sed -i '' '/minSize:.*/ s/: .*/: ${min_nodes}'/  "$TEMP"
 
- sed -i -e '/maxSize:.*/ s/: .*/: ${max_nodes}'/  "$TEMP"
+ sed -i '' '/maxSize:.*/ s/: .*/: ${max_nodes}'/  "$TEMP"
 
  kops replace -f $TEMP $KOP_ACCESS
 

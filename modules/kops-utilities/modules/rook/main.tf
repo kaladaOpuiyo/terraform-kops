@@ -14,34 +14,3 @@ resource "helm_release" "rook_beta" {
     "${file("${path.module}/chart/values.yaml")}",
   ]
 }
-
-resource "kubernetes_cluster_role_binding" "rook_beta" {
-  metadata {
-    name = "rook"
-  }
-
-  role_ref {
-    api_group = "rbac.authorization.k8s.io"
-    kind      = "ClusterRole"
-    name      = "cluster-admin"
-  }
-
-  subject {
-    kind      = "User"
-    name      = "admin"
-    api_group = "rbac.authorization.k8s.io"
-  }
-
-  subject {
-    kind      = "ServiceAccount"
-    name      = "rook"
-    namespace = "kube-system"
-    api_group = ""
-  }
-
-  subject {
-    kind      = "Group"
-    name      = "system:masters"
-    api_group = "rbac.authorization.k8s.io"
-  }
-}

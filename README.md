@@ -20,15 +20,12 @@ the destroy command to delete all cluster resources once done.
 - networking: Currently only a vpc abrstraction
 - s3: Bucket to hold kops state
 
-## **Kops-Cluster Addons**
-
-- cluster-autoscaler
-
 ## **Kops-Utilities Modules**
 
 All charts are base line configs nothing special.
 
 - consul
+- cluster-autoscaler
 - envoy
 - vault
 - fluentd_elasticsearch
@@ -68,12 +65,6 @@ make create_terraform
 make create_cluster (module=name)
 ```
 
-**Create addons**
-
-```bash
-make create_addons (module=name)
-```
-
 **Create Utilities Services**
 
 ```bash
@@ -98,12 +89,6 @@ make plan_cluster (module=name)
 make plan_user
 ```
 
-**Plan addons**
-
-```bash
-make plan_addons (module=name)
-```
-
 **Plan Utilities**
 
 ```bash
@@ -120,12 +105,6 @@ make destroy_cluster (module=name)
 
 ```bash
 make destroy_user
-```
-
-**Delete addons**
-
-```bash
-make destroy_addons (module=name)
 ```
 
 **Delete Utilities**
@@ -147,18 +126,17 @@ ssh core@{api or bastion}.{terraform.workspace}.{kops_cluster_name} -i {project.
 - ~~BUG: Prevent cluster destroy from running when a command other than destroy is requested~~ Seems to be fixed will continue to observer behavior
 - ~~Refactor kops_actions module.Every tpl should be its own module~~ DONE :)
 - Integrate autoscaler and istio into the cluster creation process
-- Redesign the cluster creation process. yaml -> terraform -> Helm -> Istio ???
+- ~~Redesign the cluster creation process. yaml -> terraform -> Helm -> Istio ???~~ DONE
 - Implement [aws-iam-authenticator](https://github.com/kubernetes-sigs/aws-iam-authenticator#kops-usage)
 - Complete Networking Abstraction from Auto-Gen Terraform code.
 - ~~Enable Addon for [cluster-autoscaler](https://github.com/kubernetes/kops/tree/master/addons/cluster-autoscaler)~~ enabled for worker nodes. DONE
 - Test Updating remaining parameters
-- Determine how to include non Kops related k8s config options ( e.g maxSize or minSize) into the cluster creation process. Should this occur as an update immediately after cluster creation???
+- ~~Determine how to include non Kops related k8s config options ( e.g maxSize or minSize) into the cluster creation process. Should this occur as an update immediately after cluster creation???~~ Solved for kubelet flags will add for others as needed
 - ~~Added Makefile :)~~
 - ~~Introduce additional k8s utilities services (envoy,vault)~~ DONE
 - Further parameterize helm install utilities
 - Resolve any associated bugs with updating the cluster
 - ~~R/v pipelines for uncessessary coding for kops-cluster~~ DONE
-- R/v pipelines for uncessessary coding for kops
 - Documment k8s utilities
 - Persistant volume integration
 - ~~Move Consul to Helm Provider~~ DONE
@@ -166,9 +144,9 @@ ssh core@{api or bastion}.{terraform.workspace}.{kops_cluster_name} -i {project.
 - Create a Lambda function to backup and snapshot the etcd volumes for recovery
 - create a DR proceedure
 - Install end user apps and figure out DNS switching for blue/green deployments
-- ~~Added Rook~~ DONE
+- ~~Added Rook~~ DONE, **SO** you need to add ceph and set up proper distributed storage
 - Determine approach for standardizing liveness and readyness probes
-- Calico Deep Dive
+- ~~Calico Deep Dive~~ Played around with setup network policies. Nothing like the realworld to test your skills :)
 - https://github.com/bitnami-labs/kubewatch
 - Research Issue
   - ~~https://github.com/kubernetes/kops/issues/834 - This issues directly relates to ACM+ELB cluster creation.~~ ISSUE resolved on kops master branch

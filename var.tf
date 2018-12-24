@@ -29,7 +29,13 @@ variable "encrypt_etcd_storage" {}
 variable "env" {}
 variable "force_destroy" {}
 variable "instance_tenancy" {}
+
+variable "kubelet_flags" {
+  default = []
+}
+
 variable "kubernetes_version" {}
+
 variable "master_count" {}
 variable "master_size" {}
 variable "master_volume_size" {}

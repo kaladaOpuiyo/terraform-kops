@@ -15,7 +15,7 @@ resource "helm_repository" "istio" {
 
 resource "null_resource" "istio_repo" {
   provisioner "local-exec" {
-    command = "cd ${path.root}/tmp && curl -L ${var.istio_repo} | sh -"
+    command = "cd ${path.root}/tmp && curl -L ${var.istio_repo} | sh - && sleep 30"
   }
 }
 
@@ -30,26 +30,27 @@ resource "helm_release" "istio" {
     value = true
   }
 
+  set {
+    name  = "grafana.enabled"
+    value = true
+  }
+
+  provisioner "local-exec" {
+    command = "kubectl get customresourcedefinition  -n istio-system | grep 'istio'|awk '{print $1}'|xargs kubectl delete customresourcedefinition  -n istio-system"
+    when    = "destroy"
+  }
+
+  depends_on = ["kubernetes_namespace.istio", "null_resource.istio_repo"]
+
   # set {
   #   name  = "tracing.enabled"
   #   value = true
   # }
 
-
   # set {
   #   name  = "kiali.enabled"
   #   value = true
   # }
-
-  set {
-    name  = "grafana.enabled"
-    value = true
-  }
-  depends_on = ["kubernetes_namespace.istio"]
-  provisioner "local-exec" {
-    command = "kubectl get customresourcedefinition  -n istio-system | grep 'istio'|awk '{print $1}'|xargs kubectl delete customresourcedefinition  -n istio-system"
-    when    = "destroy"
-  }
 }
 
 resource "null_resource" "instio_injection" {
@@ -67,7 +68,7 @@ resource "null_resource" "instio_injection" {
   depends_on = ["helm_release.istio"]
 }
 
-resource "null_resource" "istio_test_app_service" {
+resource "null_resource" "istio_test_app" {
   count = "${var.istio_install_test_app ? 1 : 0}"
 
   provisioner "local-exec" {
@@ -75,7 +76,19 @@ resource "null_resource" "istio_test_app_service" {
   }
 
   provisioner "local-exec" {
-    command = "export PATH=$PATH:${local.istio_path}/bin && ${local.istio_path}/samples/bookinfo/platform/kube/cleanup.sh"
+    command = "kubectl apply -f ${local.istio_path}/samples/bookinfo/networking/bookinfo-gateway.yaml"
+  }
+
+  provisioner "local-exec" {
+    command = "kubectl apply -f ${local.istio_path}/samples/bookinfo/networking/destination-rule-all.yaml"
+  }
+
+  provisioner "local-exec" {
+    command = "kubectl apply -f ${local.istio_path}/samples/bookinfo/networking/destination-rule-all-mtls.yaml"
+  }
+
+  provisioner "local-exec" {
+    command = "export PATH=$PATH:${local.istio_path}/bin/ && ${local.istio_path}/samples/bookinfo/platform/kube/cleanup.sh"
     when    = "destroy"
   }
 

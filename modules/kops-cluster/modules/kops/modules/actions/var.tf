@@ -23,6 +23,11 @@ variable "kops_cluster_name" {}
 variable "kops_state_bucket_name" {}
 variable "kops_state_store" {}
 variable "kubernetes_version" {}
+
+variable "kubelet_flags" {
+  default = []
+}
+
 variable "master_count" {}
 variable "master_size" {}
 variable "master_volume_size" {}

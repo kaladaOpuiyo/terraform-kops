@@ -6,8 +6,8 @@ help:
 .DEFAULT_GOAL := help
 
 
-all: init create_user create_cluster create_addons create_utilities ## Create all resources
-destroy_all: init destroy_utilities destroy_addons destroy_cluster destroy_user    ## Destroy all resources
+all: init create_user create_cluster create_utilities ## Create all resources
+destroy_all: init destroy_utilities destroy_cluster destroy_user    ## Destroy all resources
 
 init: ## Init terraform
 	terraform init
@@ -47,14 +47,6 @@ else
 	terraform apply -target=module.kops_utilities -auto-approve
 endif
 
-create_addons: ## Installs addons. Specific addon, module=name
-
-ifdef module
-	terraform apply -target=module.kops_addons.module.$(module) -auto-approve
-else
-	terraform apply -target=module.kops_addons -auto-approve
-endif
-
 create_yaml: ## Creates terraform auto-genrated code for cluster , sets -var 'dry_run=true' , -var 'deploy_cluster=false' ,  -var 'update_cluster=false'
 	terraform apply -target=module.kops_cluster -auto-approve \
 	 -var 'dry_run=true' \
@@ -83,13 +75,6 @@ else
 	terraform destroy -target=module.kops_utilities
 endif
 
-destroy_addons: ## Uninstalls helm cluster utilities charts. Specific utility, module=name
-
-ifdef module
-	terraform destroy -target=module.kops_addons.module.$(module)
-else
-	terraform destroy -target=module.kops_addons
-endif
 
 plan_cluster: ## Run a plan against current cluster settings does not plan auto genetrated kops code. May be future addition
 
@@ -98,15 +83,6 @@ ifdef module
 else
 	terraform plan -target=module.kops_cluster
 endif
-
-plan_addons: ## Run a plan on the kops_utilities module. Specific utility, module=name
-
-ifdef module
-	terraform plan -target=module.kops_addons.module.$(module)
-else
-	terraform plan -target=module.kops_addons
-endif
-
 
 plan_utilities: ## Run a plan on the kops_utilities module. Specific utility, module=name
 

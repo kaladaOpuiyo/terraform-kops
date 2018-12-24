@@ -12,7 +12,7 @@ variable "istio_helm_repository_url" {
 }
 
 variable "istio_install_test_app" {
-  default = "true"
+  default = "false"
 }
 
 variable "istio_repo" {
@@ -23,7 +23,13 @@ variable "istio_version" {
   default = "1.0.5"
 }
 
+variable "max_nodes" {}
+variable "min_nodes" {}
+
 variable "tiller_namespace" {
   description = "tiller_namespace"
   default     = "kube-system"
 }
+
+variable "cluster_deployed" {}
+variable "kops_state_bucket_name" {}

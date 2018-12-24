@@ -2,10 +2,6 @@ resource "helm_release" "k8s_dashboard" {
   name      = "kubernetes-dashboard"
   chart     = "stable/kubernetes-dashboard"
   namespace = "${var.tiller_namespace}"
-
-  values = [
-    "${file("${path.module}/chart/values.yaml")}",
-  ]
 }
 
 resource "kubernetes_cluster_role_binding" "k8s_dashboard" {

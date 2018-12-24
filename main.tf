@@ -63,6 +63,7 @@ module "kops_cluster" {
   keypair_name           = "${local.keypair_name}"
   kops_cluster_name      = "${local.kops_cluster_name}"
   kops_state_bucket_name = "${local.kops_state_bucket_name}"
+  kubelet_flags          = "${var.kubelet_flags}"
   kubernetes_version     = "${var.kubernetes_version}"
   master_count           = "${var.master_count}"
   master_size            = "${var.master_size}"
@@ -94,20 +95,14 @@ module "kops_iam" {
 module "kops_utilities" {
   source = "./modules/kops-utilities"
 
-  kops_cluster_name = "${terraform.workspace}.${local.kops_cluster_name}"
-  tiller_namespace  = "kube-system"
+  cluster_deployed       = "${module.kops_cluster.cluster_deployed}"
+  kops_cluster_name      = "${local.kops_cluster_name}"
+  kops_state_bucket_name = "${local.kops_state_bucket_name}"
+  max_nodes              = "${var.max_nodes}"
+  min_nodes              = "${var.min_nodes}"
+  tiller_namespace       = "kube-system"
 
   depends_on = [
     "${module.kops_cluster.cluster_exist}",
   ]
-}
-
-module "kops_addons" {
-  source = "./modules/kops-addons"
-
-  kops_cluster_name      = "${local.kops_cluster_name}"
-  kops_state_bucket_name = "${local.kops_state_bucket_name}"
-  cluster_deployed       = "${module.kops_cluster.cluster_deployed}"
-  max_nodes              = "${var.max_nodes}"
-  min_nodes              = "${var.min_nodes}"
 }

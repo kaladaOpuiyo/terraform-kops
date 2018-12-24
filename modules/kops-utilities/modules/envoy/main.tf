@@ -3,9 +3,9 @@ resource "helm_release" "envoy" {
   chart     = "stable/envoy"
   namespace = "${var.tiller_namespace}"
 
-  values = [
-    "${file("${path.module}/chart/values.yaml")}",
-  ]
+  # values = [
+  #   "${file("${path.module}/chart/values.yaml")}",
+  # ]
 }
 
 # resource "kubernetes_cluster_role_binding" "envoy" {
