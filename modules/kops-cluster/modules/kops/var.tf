@@ -25,6 +25,11 @@ variable "force_destroy" {}
 variable "instance_tenancy" {}
 variable "keypair_name" {}
 variable "kops_cluster_name" {}
+
+variable "kubelet_flags" {
+  default = []
+}
+
 variable "kops_state_bucket_name" {}
 variable "kops_state_store" {}
 variable "kubernetes_version" {}

@@ -7,6 +7,8 @@ variable "bastion" {}
 variable "cloud_labels" {}
 variable "cloud" {}
 variable "cluster_bucket" {}
+variable "cluster_deployed" {}
+
 variable "cluster_key" {}
 variable "cluster_region" {}
 variable "deploy_cluster" {}
@@ -17,6 +19,11 @@ variable "encrypt_etcd_storage" {}
 variable "kops_cluster_name" {}
 variable "kops_state_bucket_name" {}
 variable "kops_state_store" {}
+
+variable "kubelet_flags" {
+  default = []
+}
+
 variable "kubernetes_version" {}
 variable "master_count" {}
 variable "master_size" {}

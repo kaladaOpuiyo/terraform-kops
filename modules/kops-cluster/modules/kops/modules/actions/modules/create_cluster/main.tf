@@ -1,6 +1,4 @@
 resource "local_file" "kops_tf" {
-  count = "${var.dry_run == "false" ? 1:0}"
-
   content  = "${data.template_file.kops_tf.rendered}"
   filename = "${path.root}/tmp/${sha1(data.template_file.kops_tf.rendered)}.sh"
 
@@ -8,6 +6,14 @@ resource "local_file" "kops_tf" {
     command = "${self.filename}"
   }
 }
+
+# resource "null_resource" "kops_update" {
+#   count = "${var.dry_run == "false" ? 1:0}"
+
+#   provisioner "local-exec" {
+#     command = "${data.template_file.kops_tf.rendered}"
+#   }
+# }
 
 data "template_file" "kops_tf" {
   template = "${file("${path.module}/bin/kops_tf.tpl")}"
@@ -22,6 +28,7 @@ data "template_file" "kops_tf" {
     cloud                  = "${var.cloud}"
     cloud_labels           = "${var.cloud_labels}"
     cluster_bucket         = "${var.cluster_bucket}"
+    cluster_deployed       = "${var.cluster_deployed}"
     cluster_key            = "${var.cluster_key}"
     cluster_region         = "${var.cluster_region}"
     deploy_cluster         = "${var.deploy_cluster}"
@@ -33,6 +40,7 @@ data "template_file" "kops_tf" {
     kops_cluster_name      = "${var.kops_cluster_name}"
     kops_state_bucket_name = "${var.kops_state_bucket_name}"
     kops_state_store       = "${var.kops_state_store}"
+    kubelet_flags          = "${join(" ",var.kubelet_flags)}"
     kubernetes_version     = "${var.kubernetes_version}"
     master_count           = "${var.master_count}"
     master_size            = "${var.master_size}"

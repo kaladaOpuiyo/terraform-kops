@@ -10,7 +10,7 @@ resource "null_resource" "kops_destroy" {
 }
 
 data "template_file" "kops_destroy" {
-  template = "${file("${path.module}/template/kops_destroy.tpl")}"
+  template = "${file("${path.module}/bin/kops_destroy.tpl")}"
 
   vars {
     kops_state_store  = "${var.kops_state_store}"

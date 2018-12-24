@@ -40,9 +40,9 @@ updateInstanceGroup(){
 
  kops get ig ${instance_group} --name=$CLUSTER_NAME  --state=s3://${kops_state_bucket_name} -o yaml > $TEMP
 
- sed -i -e '/minSize:.*/ s/: .*/: ${min_nodes}'/  "$TEMP"
+ sed -i '' '/minSize:.*/ s/: .*/: ${min_nodes}'/  "$TEMP"
 
- sed -i -e '/maxSize:.*/ s/: .*/: ${max_nodes}'/  "$TEMP"
+ sed -i '' '/maxSize:.*/ s/: .*/: ${max_nodes}'/  "$TEMP"
 
  kops replace -f $TEMP $KOP_ACCESS
 

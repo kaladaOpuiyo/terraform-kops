@@ -63,6 +63,7 @@ module "kops_cluster" {
   keypair_name           = "${local.keypair_name}"
   kops_cluster_name      = "${local.kops_cluster_name}"
   kops_state_bucket_name = "${local.kops_state_bucket_name}"
+  kubelet_flags          = "${var.kubelet_flags}"
   kubernetes_version     = "${var.kubernetes_version}"
   master_count           = "${var.master_count}"
   master_size            = "${var.master_size}"

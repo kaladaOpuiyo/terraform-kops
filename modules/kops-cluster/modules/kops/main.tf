@@ -24,6 +24,7 @@ module "actions" {
   kops_cluster_name      = "${var.kops_cluster_name}"
   kops_state_bucket_name = "${var.kops_state_bucket_name}"
   kops_state_store       = "${var.kops_state_store}"
+  kubelet_flags          = "${var.kubelet_flags}"
   kubernetes_version     = "${var.kubernetes_version}"
   master_count           = "${var.master_count}"
   master_size            = "${var.master_size}"

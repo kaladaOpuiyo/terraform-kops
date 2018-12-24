@@ -36,7 +36,13 @@ variable "instance_tenancy" {}
 variable "keypair_name" {}
 
 variable "kops_cluster_name" {}
+
 variable "kops_state_bucket_name" {}
+
+variable "kubelet_flags" {
+  default = []
+}
+
 variable "kubernetes_version" {}
 variable "master_count" {}
 variable "master_size" {}

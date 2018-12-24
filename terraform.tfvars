@@ -36,6 +36,8 @@ instance_tenancy = "default"
 
 kubernetes_version = "v1.11.5"
 
+kubelet_flags = ["authorizationMode:Webhook", "authenticationTokenWebhook:true"]
+
 master_count = "1" #BUGGY
 
 master_size = "t2.medium" #UPDATEABLE
@@ -44,7 +46,7 @@ master_volume_size = "20" #UPDATEABLE
 
 master_zone = "us-east-1a" #BUGGY
 
-max_nodes = "3"
+max_nodes = "5"
 
 min_nodes = "2"
 
