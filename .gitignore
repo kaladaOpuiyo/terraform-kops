@@ -6,6 +6,7 @@
 *.tfstate.*
 *.com.yaml
 *.pem
+**/k8s_provider
 *.pub
 *.sh
 # Crash log files

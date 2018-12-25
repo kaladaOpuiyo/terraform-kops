@@ -1,0 +1,1 @@
+variable "rook_namespace" {}
