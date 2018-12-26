@@ -1,11 +1,13 @@
 #!/bin/bash
 
+TEMP_DIR=${path_root}/tmp/${workspace}
 TF_FILES=${path_root}/${out}/${workspace}/kubernetes.tf
 TF_PLAN=${path_root}/tmp/${workspace}_cluster.tfplan
 EDIT_CONFIG=${path_root}/config/${workspace}/edited.${kops_cluster_name}.yaml
 KUBE_CONFIG="~/.kube/config"
 KUBELET_FLAGS=(${kubelet_flags})
 
+set -e
 
 addHelmProvider(){
 
@@ -92,6 +94,23 @@ applyKopsTerraform(){
     fi
 }
 
+updateInstanceGroup(){
+  echo '<======updateInstanceGroup======>'
+
+  if ! [[ -d $TEMP_DIR ]];
+      then
+          mkdir -p  $TEMP_DIR
+  fi
+
+  TEMP=$TEMP_DIR/tmp.${kops_cluster_name}.yaml
+
+  awk '$1 == "name:" { tag = ($2 == "nodes") } tag && $1 == "maxSize:"{$1 = "  " $1; $2 = "${max_nodes}"} 1' $EDIT_CONFIG > $TEMP
+  awk '$1 == "name:" { tag = ($2 == "nodes") } tag && $1 == "minSize:"{$1 = "  " $1; $2 = "${min_nodes}"} 1' $TEMP > $EDIT_CONFIG
+
+}
+
+
+
 addKubeletFlags(){
  echo '<======addKubeletFlags======>'
 
@@ -167,6 +186,26 @@ sleep 30
      fi
 }
 
+
+clusterAutoScaler(){
+echo '<======clusterAutoScaler======>'
+
+  wget -O ${autoscaler} ${cluster_auto_scaler_url}
+
+  sed -i '' "s@{{CLOUD_PROVIDER}}@${cloud}@g" "${autoscaler}"
+  sed -i '' "s@{{IMAGE}}@${image_cluster_autoscaler}@g" "${autoscaler}"
+  sed -i '' "s@{{MIN_NODES}}@${min_nodes}@g" "${autoscaler}"
+  sed -i '' "s@{{MAX_NODES}}@${max_nodes}@g" "${autoscaler}"
+  sed -i '' "s@{{GROUP_NAME}}@${group_name}@g" "${autoscaler}"
+  sed -i '' "s@{{AWS_REGION}}@${aws_region}@g" "${autoscaler}"
+  sed -i '' "s@{{SSL_CERT_PATH}}@${ssl_cert_path}@g" "${autoscaler}"
+
+  while [ 1 ]; do  kubectl apply -f ${autoscaler} && break || sleep 5; done;
+
+
+}
+
+
 ########################################################################################################################
 # Main
 ########################################################################################################################
@@ -175,19 +214,23 @@ sleep 30
 if  [[ ${dry_run} == true ]];
     then
         createYamlConfig
+        addKubeletFlags
+        updateInstanceGroup
     else
         if [ ! -f $EDIT_CONFIG ] || [[ ${update_cluster} == true ]];
            then
                createYamlConfig
+               addKubeletFlags
+               updateInstanceGroup
         fi
 
-        addKubeletFlags
         replaceCluster
         clusterPubSecret
         clusterTerraform
         addRemoteState
         addHelmProvider
         applyKopsTerraform
+        clusterAutoScaler
         rollingUpdateCheck
 fi
 

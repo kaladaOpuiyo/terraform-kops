@@ -29,6 +29,8 @@ variable "master_count" {}
 variable "master_size" {}
 variable "master_volume_size" {}
 variable "master_zone" {}
+variable "max_nodes" {}
+variable "min_nodes" {}
 variable "need_update" {}
 variable "network_cidr" {}
 variable "networking" {}

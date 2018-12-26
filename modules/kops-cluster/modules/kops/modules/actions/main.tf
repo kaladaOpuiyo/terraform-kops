@@ -36,6 +36,8 @@ module "cluster" {
   master_size            = "${var.master_size}"
   master_volume_size     = "${var.master_volume_size}"
   master_zone            = "${var.master_zone}"
+  max_nodes              = "${var.max_nodes}"
+  min_nodes              = "${var.min_nodes}"
   need_update            = "${var.need_update}"
   network_cidr           = "${var.network_cidr}"
   networking             = "${var.networking}"

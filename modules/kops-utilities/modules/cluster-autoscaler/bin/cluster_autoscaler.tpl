@@ -19,6 +19,7 @@ IAM_ROLE=${iam_role}
 SSL_CERT_PATH=${ssl_cert_path}
 KOP_ACCESS="--state=s3://${kops_state_bucket_name} --name ${cluster_name}"
 TEMP=tmp/ig_group.yaml
+INSTANCE_GROUP_SET=true
 
 
 clusterAutoScaler(){
@@ -36,7 +37,7 @@ kubectl apply -f ${autoscaler}
 }
 
 updateInstanceGroup(){
- echo "update instance group here "
+ echo "update instance group here"
 
  kops get ig ${instance_group} --name=$CLUSTER_NAME  --state=s3://${kops_state_bucket_name} -o yaml > $TEMP
 
@@ -58,6 +59,10 @@ updateInstanceGroup(){
 
 if [[ ${cluster_deployed} == true ]];
     then
-        updateInstanceGroup
+        if [[ INSTANCE_GROUP_SET == false ]];
+            then
+                updateInstanceGroup
+        fi
+
         clusterAutoScaler
 fi

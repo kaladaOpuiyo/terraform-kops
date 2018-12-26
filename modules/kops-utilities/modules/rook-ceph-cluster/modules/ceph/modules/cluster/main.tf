@@ -1,6 +1,6 @@
 resource "null_resource" "rook_ceph_cluster" {
   provisioner "local-exec" {
-    command = "cat << EOF | kubectl apply -f - \n${data.template_file.rook_ceph_cluster.rendered}EOF"
+    command = "cat <<  EOF | kubectl apply -f - \n${data.template_file.rook_ceph_cluster.rendered}EOF"
   }
 }
 

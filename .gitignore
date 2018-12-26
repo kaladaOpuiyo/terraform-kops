@@ -6,7 +6,7 @@
 *.tfstate.*
 *.com.yaml
 *.pem
-**/k8s_provider
+**/terraform-provider-kubernetes
 *.pub
 *.sh
 # Crash log files
