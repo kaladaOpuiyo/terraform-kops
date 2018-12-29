@@ -124,6 +124,7 @@ clusterPubSecret(){
   echo '<======clusterPubSecret======>'
   kops create secret  --name=${kops_cluster_name} --state=${kops_state_store} sshpublickey admin -i ${ssh_public_key}
 }
+
 clusterTerraform(){
   echo '<======clusterTerraform======>'
   kops update cluster --name=${kops_cluster_name} --state=${kops_state_store} --target=terraform  --out=${path_root}/${out}/${workspace}

@@ -1,0 +1,9 @@
+apiVersion: kops/v1alpha2
+kind: InstanceGroup
+metadata:
+  creationTimestamp: 2018-12-28T19:17:25Z
+  name: master
+spec:
+  role: Master
+  subnets:
+  - us-east-1a

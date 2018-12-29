@@ -25,7 +25,7 @@ data "template_file" "cluster" {
   vars {
     admin_access             = "${var.admin_access}"
     api_loadbalancer_type    = "${var.api_loadbalancer_type}"
-    api_ssl_certificate      = "${var.api_loadbalancer_type == "" ? "": var.domain_cert_arn}"
+    api_ssl_certificate      = "${var.api_loadbalancer_type == "" ? "" : var.domain_cert_arn}"
     associate_public_ip      = "${var.associate_public_ip}"
     authorization            = "${var.authorization}"
     autoscaler               = "${local.autoscaler}"
@@ -52,7 +52,7 @@ data "template_file" "cluster" {
     kops_cluster_name        = "${var.kops_cluster_name}"
     kops_state_bucket_name   = "${var.kops_state_bucket_name}"
     kops_state_store         = "${var.kops_state_store}"
-    kubelet_flags            = "${join(" ",var.kubelet_flags)}"
+    kubelet_flags            = "${join(" ", var.kubelet_flags)}"
     kubernetes_version       = "${var.kubernetes_version}"
     master_count             = "${var.master_count}"
     master_size              = "${var.master_size}"
@@ -83,8 +83,9 @@ data "template_file" "cluster" {
 }
 
 resource "aws_iam_policy" "cluster_autoscaler_policy" {
-  name        = "aws-cluster-autoscaler"
+  count       = "${var.dry_run == "true" ? 0 : 1}"
   description = "aws-cluster-autoscaler"
+  name        = "aws-cluster-autoscaler"
 
   policy = <<EOF
 {
@@ -108,8 +109,9 @@ EOF
 }
 
 resource "aws_iam_role_policy_attachment" "cluster_autoscaler_policy" {
-  role       = "masters.${var.kops_cluster_name}"
+  count      = "${var.dry_run == "true" ? 0 : 1}"
   policy_arn = "${aws_iam_policy.cluster_autoscaler_policy.arn}"
+  role       = "masters.${var.kops_cluster_name}"
 
   depends_on = ["local_file.cluster"]
 }
